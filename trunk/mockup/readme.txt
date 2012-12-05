@@ -11,7 +11,14 @@ Mockup is a plugin that helps you to present your designs professionally to your
 
 == Description ==
 
-With the Mockup plugin your customers will have the possibility to read your comments, add remarks and approve the design. 
+Mockup is the perfect solution for any designer who wants to present a (website) design to a customer.
+
+
+With the Mockup plugin your customers will have the possibility to:
+* Read your comments;
+* Add remarks;
+* Approve the design.
+
 
 It's possible to link all your designs to one customer. The customer will have a list of all the designs you made for him.
 
@@ -44,6 +51,9 @@ Go to setting -> permalinks then click on 'Save changes'. That should fix it!
 4. List of your customers.
 
 == Changelog ==
+
+= 1.0.1 =
+* Bug fix
 
 = 1.0.0 =
 * Mockup Beta.

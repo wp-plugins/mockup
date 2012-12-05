@@ -1,14 +1,12 @@
 <?php
 /*
-
 Plugin Name: MockUp
 Plugin URI: http://www.estjallema.nl/plugin/mockup
 Description: Mockup is a plugin that helps you to present your designs professionally to your customers.
-Version: 1.0.0
+Version: 1.0.1
 Author: Eelco Tjallema
 Author URI: http://www.estjallema.nl
 License: GPL2
-
 
 Copyright 2012  Eelco Tjallema  (email : mockup@estjallema.nl)
 
@@ -29,6 +27,40 @@ Copyright 2012  Eelco Tjallema  (email : mockup@estjallema.nl)
 
 // Add custom post type
 add_action( 'init', 'create_mockup_post_types' );
+
+// Add metabox to custom post type
+add_action( 'add_meta_boxes', 'mockup_meta_box_add' );
+
+// Save the information from the metabox 
+add_action( 'save_post', 'mockup_meta_box_save' );
+
+// Add custom taxonomie to the custom post type
+add_action( 'init', 'add_custom_taxonomies', 0 );
+
+// Add custom taxonomie filter
+add_action('restrict_manage_posts', 'filter_by_relate_mockup');
+add_filter('parse_query', 'convert_id_to_term_in_query');
+
+// Add Mockup Template
+add_action('template_redirect', 'add_mockup_template');
+
+// Adding admin menu
+if(is_admin())	{
+					add_action('admin_init', array('mockup_options', 'register'));
+					add_action('admin_menu', array('mockup_options', 'menu'));
+				}
+
+// Add custom values on activation
+register_activation_hook(__FILE__,'mockup_activation');
+
+
+// Making sure support for post thumbnails is enabled
+add_theme_support( 'post-thumbnails' ); 
+
+
+/*
+ * 		Start functions
+*/
 
 function create_mockup_post_types() {
 	register_post_type( 'pt_mockup_plugin',
@@ -63,15 +95,14 @@ function create_mockup_post_types() {
 
 
 
-add_action( 'add_meta_boxes', 'muckup_meta_box_add' );
 
-function muckup_meta_box_add()
+function mockup_meta_box_add()
 {
-	add_meta_box( 'muckup_meta_box_add_id', 'Mockup settings', 'muckup_meta_box_fields', 'pt_mockup_plugin', 'normal', 'high' );
+	add_meta_box( 'mockup_meta_box_add_id', 'Mockup settings', 'mockup_meta_box_fields', 'pt_mockup_plugin', 'normal', 'high' );
 }
 
 
-function muckup_meta_box_fields( $post )
+function mockup_meta_box_fields( $post )
 {
 	$values = get_post_custom( $post->ID );
 	
@@ -91,7 +122,6 @@ function muckup_meta_box_fields( $post )
 }
 
 
-add_action( 'save_post', 'mockup_meta_box_save' );
 
 function mockup_meta_box_save( $post_id )
 {
@@ -114,7 +144,8 @@ function mockup_meta_box_save( $post_id )
 }
 
 
-// Add custom taxonomie
+
+
 function add_custom_taxonomies() {
 	register_taxonomy('relate_mockup', 'pt_mockup_plugin', array(
 		'hierarchical' => true,
@@ -140,10 +171,9 @@ function add_custom_taxonomies() {
 	));
 }
 
-add_action( 'init', 'add_custom_taxonomies', 0 );
 
 
-// Backend taxonomie filter
+
 function filter_by_relate_mockup() {
 	global $typenow;
 	$post_type = 'pt_mockup_plugin';
@@ -163,9 +193,6 @@ function filter_by_relate_mockup() {
 	};
 }
 
-add_action('restrict_manage_posts', 'filter_by_relate_mockup');
-
-
 function convert_id_to_term_in_query($query) {
 	global $pagenow;
 	$post_type = 'pt_mockup_plugin';
@@ -177,10 +204,10 @@ function convert_id_to_term_in_query($query) {
 	}
 }
 
-add_filter('parse_query', 'convert_id_to_term_in_query');
 
 
-// Add Mockup Template
+
+
 function add_mockup_template() {
 	if(is_singular('pt_mockup_plugin')) {
 		include('templates/single-pt_mockup_plugin.php');
@@ -188,14 +215,9 @@ function add_mockup_template() {
 	}
 }
 
-add_action('template_redirect', 'add_mockup_template');
 
 
-// Making sure support for post thumbnails is enabled
-add_theme_support( 'post-thumbnails' ); 
 
-
-// Admin menu
 if(!class_exists('mockup_options')) :
 
 define('mockup_options_id', 'mockup-options');
@@ -256,17 +278,12 @@ define('mockup_options_nick', 'MockUp');
 		}
 
     }
-    if ( is_admin() )
-	{
-		add_action('admin_init', array('mockup_options', 'register'));
-		add_action('admin_menu', array('mockup_options', 'menu'));
-	}
+
 
 endif;
 
 
-// Add custom values on activation
-register_activation_hook(__FILE__,'mockup_activation');
+
 
 function mockup_activation() {
 
