@@ -3,7 +3,7 @@
 Plugin Name: MockUp
 Plugin URI: http://www.estjallema.nl/plugin/mockup
 Description: Mockup is a plugin that helps you to present your designs professionally to your customers.
-Version: 1.0.2
+Version: 1.0.3
 Author: Eelco Tjallema
 Author URI: http://www.estjallema.nl
 License: GPL2
