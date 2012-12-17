@@ -50,11 +50,11 @@
 		
 									echo '<img src="'.wp_get_attachment_url(get_post_thumbnail_id($temp_id) ).'">' ;
 		
-									echo '<h3>';
+									echo '<h4>';
 
 									the_title();
 		
-									echo '</h3>';
+									echo '</h4>';
 
 									echo '<p>';
 
