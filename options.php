@@ -100,12 +100,12 @@
 
 			<tr>
 				<td><p>Header color</p></td>
-				<td><input type="text" name="mockup_header_color" value="<?php echo get_option('mockup_header_color'); ?>" size="40" /></td>
-			</tr>
-
-			<tr>
-				<td><p>Border color</p></td>
-				<td><input type="text" name="mockup_border_color" value="<?php echo get_option('mockup_border_color'); ?>" size="40" /></td>
+				<td>
+					<select name="mockup_header">
+						<option value="light"<?php $value = get_option('mockup_header'); if($value == 'light') { echo ' selected="selected"'; } ?>>Light</option>
+						<option value="dark"<?php if($value == 'dark') { echo ' selected="selected"'; } ?>>Dark</option>
+					</select>
+				</td>
 			</tr>
 
 			<tr>

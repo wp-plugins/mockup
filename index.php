@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: MockUp
-Plugin URI: http://www.estjallema.nl/plugin/mockup
-Description: Mockup is a plugin that helps you to present your designs professionally to your customers.
-Version: 1.0.4
+Plugin URI: http://www.estjallema.nl/mockup
+Description: Mockup helps you to <strong>present your designs professionally</strong> to your clients. Visit the Mockup website for support, demo’s and video tutorials.
+Version: 1.0.5
 Author: Eelco Tjallema
 Author URI: http://www.estjallema.nl
 License: GPL2
@@ -53,6 +53,8 @@ if(is_admin())	{
 // Add custom values on activation
 register_activation_hook(__FILE__,'mockup_activation');
 
+// Add stylesheet
+add_action('admin_head', 'admin_register_head');
 
 // Making sure support for post thumbnails is enabled
 add_theme_support( 'post-thumbnails' ); 
@@ -86,14 +88,11 @@ function create_mockup_post_types() {
 			'hierarchical' => false,
 			'show_in_nav_menus' => true,
    			'rewrite' => array("slug" => "mockup"),
-   			'supports' => array('title', 'editor', 'thumbnail'), 
+   			'supports' => array('title', 'editor', 'thumbnail','page-attributes'),//,'custom-fields'
    			'menu_icon' => plugins_url( 'img/ico.png' , __FILE__ )
 		)
 	);
 }
-
-
-
 
 
 function mockup_meta_box_add()
@@ -111,15 +110,53 @@ function mockup_meta_box_fields( $post )
 	wp_nonce_field( 'mockup_meta_box_nonce', 'meta_box_nonce' );
 	?>
 
-	<?php if(get_post_meta(get_the_ID(), 'mockup_approved', true) == 'approved') {
-		echo "<h2>&#10003; This mockup is APPROVED</h2>";
-	} ?>
+	<table class="mockup">
 
-	<p><strong>Background color</strong><br />(custom is: <?php echo get_option('mockup_default_background_color'); ?>)</p>
-		#<input type="tekst" name="mockup_background_color" value="<?php echo $background_color; ?>">
+	<?php if(get_post_meta(get_the_ID(), 'mockup_approved', true) == 'approved') { ?>
+		<tr>
 
-	<?php	
-}
+			<td class="mockup_left"><strong>Mockup</strong></td>
+			<td class="mockup_right">This mockup is approved!</td>
+
+		</tr>
+	<?php } ?>
+
+
+
+		<tr>
+
+			<td class="mockup_left"><strong>Override background color</strong></td>
+			<td class="mockup_right">#<input type="tekst" name="mockup_background_color" value="<?php echo $background_color; ?>" size="6" maxlength="6"></td>
+
+		</tr>
+
+		<?php 	$remarks = get_post_meta(get_the_ID(), 'mockup_remark', false);
+				$remarks_display = get_post_meta(get_the_ID(), 'mockup_remark', true);
+				if($remarks_display != '') {
+		?>
+
+		<tr>
+
+			<td class="mockup_left" valign="top">
+				<h4>Remarks</h4>
+			</td>
+
+			<td class="mockup_right">
+				<?php foreach($remarks as $remark) {
+					echo $remark;
+					echo '<br><br>';
+				} ?>
+			</td>
+
+		</tr>
+
+		<?php } ?>
+
+	</table>
+
+<?php //echo get_option('mockup_default_background_color'); ?>
+
+<?php } 
 
 
 
@@ -216,6 +253,12 @@ function add_mockup_template() {
 }
 
 
+function admin_register_head() {
+    $siteurl = get_option('siteurl');
+    $url = $siteurl . '/wp-content/plugins/' . basename(dirname(__FILE__)) . '/css/mockup_style.css';
+    echo "<link rel='stylesheet' type='text/css' href='$url' />\n";
+}
+
 
 
 if(!class_exists('mockup_options')) :
@@ -251,8 +294,8 @@ define('mockup_options_nick', 'MockUp');
 			register_setting(mockup_options_id.'_options', 'mockup_approved_text');
 
 			register_setting(mockup_options_id.'_options', 'mockup_default_background_color');
-			register_setting(mockup_options_id.'_options', 'mockup_header_color');
-			register_setting(mockup_options_id.'_options', 'mockup_border_color');
+			register_setting(mockup_options_id.'_options', 'mockup_header');
+			//register_setting(mockup_options_id.'_options', 'mockup_border_color');
 
 			register_setting(mockup_options_id.'_options', 'mockup_email');
 
@@ -436,16 +479,16 @@ function mockup_activation() {
 	}
 
 
-	$mockup_header_color_name = 'mockup_header_color' ;
-	$mockup_header_color_default_value = '4D4D4D' ;
+	$mockup_header_name = 'mockup_header' ;
+	$mockup_header_default_value = 'light' ;
 	
-	if (get_option( $mockup_header_color_name ) == $mockup_header_color_default_value ) {
-	    update_option( $mockup_header_color_name, $mockup_header_color_default_value );
+	if (get_option( $mockup_header_name ) == $mockup_header_default_value ) {
+	    update_option( $mockup_header_name, $mockup_header_default_value );
 	} else {
-		add_option( $mockup_header_color_name, $mockup_header_color_default_value );
+		add_option( $mockup_header_name, $mockup_header_default_value );
 	}
 
-
+/*
 	$mockup_border_color_name = 'mockup_border_color' ;
 	$mockup_border_color_default_value = '4D4D4D' ;
 	
@@ -454,7 +497,7 @@ function mockup_activation() {
 	} else {
 		add_option( $mockup_border_color_name, $mockup_border_color_default_value );
 	}
-
+*/
 
 
 	$mockup_email_name = 'mockup_email' ;

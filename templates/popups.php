@@ -1,5 +1,5 @@
 		<!-- Related popup -->
-		<div id="related" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div id="related" class="modal hide fade">
 	
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -22,6 +22,8 @@
 			
 						$args = array(
 							'post_type' => 'pt_mockup_plugin',
+							'orderby' => 'menu_order',
+							'order' => 'ASC',
 							'tax_query' => array(
 								array(
 									'taxonomy' => 'relate_mockup',
@@ -34,58 +36,37 @@
 		
 							$i = 0;
 							
-							echo '<ul class="thumbnails">';
+							echo '<table class="table">';
 		
 							while ( $the_query->have_posts() ) : $the_query->the_post();
 							
 								$i++;
-							
+
 								$temp_id = get_the_ID();
-							
-								if($the_id != $temp_id) {
-										
-									echo '<li class="span3">';
-							
-									echo '<div class="thumbnail">';
+
+								if($the_id == $temp_id) { $disable = ' disabled'; } else { $disable = ''; }
+												
+									echo '<tr>';
 		
-									echo '<img src="'.wp_get_attachment_url(get_post_thumbnail_id($temp_id) ).'">' ;
+									//echo '<img src="'.wp_get_attachment_url(get_post_thumbnail_id($temp_id) ).'">' ;
 		
-									echo '<h4>';
+									echo '<th class="span8">';
 
-									the_title();
+									echo substr(get_the_title(), 0, 40); if(strlen(get_the_title()) > 41) { echo '&#133;'; }
 		
-									echo '</h4>';
+									echo '</th>';
 
-									echo '<p>';
+									echo '<th class="span4">';
 
-									if(get_post_meta(get_the_ID(), 'mockup_approved', true) == 'approved') {
+									echo '<a class="btn btn-mini btn-info pull-right" href="'.get_permalink().'"'.$disable.'>'.get_option('mockup_related_popup_btn').'</a>';
 
-										echo '<span class="label label-success">';
-
-										echo get_option('mockup_approved_text');
-
-										echo '</span>';
-
-
-									} else {
-
-										echo substr(get_the_content(), 0, 55); if ( strlen(get_the_content()) > 56) { echo '…'; }
+									echo '</th>';
 									
-									}
-									
-									echo '</p>';
-		
-									echo '<a class="btn btn-primary" href="'.get_permalink().'">'.get_option('mockup_related_popup_btn').'</a>';
-
-									echo '</div>';
-									
-									echo '</li>';
-	
-								}
+									echo '</tr>';
 	
 							endwhile;
 							
-							echo '</ul>';
+							echo '</table>';
 	
 							if($i < 2) { $hide_related_btn = true; } else { $hide_related_btn = false; }
 	
@@ -103,7 +84,7 @@
 	<!-- Description popup -->
 	<?php $content = get_the_content(); if(!$content == '') { ?>
 	
-		<div id="description" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div id="description" class="modal hide fade">
 	
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -124,7 +105,7 @@
 
 
 		<!-- Comment popup -->
-		<div id="comment" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div id="comment" class="modal hide fade">
 
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -157,7 +138,7 @@
 	    </div>
 
 		<!-- Approve popup -->
-		<div id="approve" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div id="approve" class="modal hide fade">
 	
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
