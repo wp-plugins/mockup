@@ -3,7 +3,7 @@
 Plugin Name: MockUp
 Plugin URI: http://www.estjallema.nl/mockup
 Description: Mockup helps you to <strong>present your designs professionally</strong> to your clients. Visit the Mockup website for support, demo’s and video tutorials.
-Version: 1.0.5
+Version: 1.0.6
 Author: Eelco Tjallema
 Author URI: http://www.estjallema.nl
 License: GPL2
@@ -27,6 +27,9 @@ Copyright 2012  Eelco Tjallema  (email : mockup@estjallema.nl)
 
 // Add custom post type
 add_action( 'init', 'create_mockup_post_types' );
+
+// Flush custom post type
+register_activation_hook(__FILE__, 'custom_flush_rules');
 
 // Add metabox to custom post type
 add_action( 'add_meta_boxes', 'mockup_meta_box_add' );
@@ -66,62 +69,71 @@ add_theme_support( 'post-thumbnails' );
 
 function create_mockup_post_types() {
 	register_post_type( 'pt_mockup_plugin',
+
 		array(
 			'labels' => array(
-				'name' => __( 'Mockup' ),
-				'singular_name' => __( 'Mockup' ),
-				'add_new' => __( 'Add new Mockup' ),
-				'add_new_item' => __( 'Add New Mockup' ),
-				'edit' => __( 'Edit' ),
-				'edit_item' => __( 'Edit Mockup' ),
-				'new_item' => __( 'New Mockup' ),
-				'view' => __( 'View Mockup' ),
-				'view_item' => __( 'View Mockup' ),
-				'search_items' => __( 'Search Mockups' ),
-				'not_found' => __( 'No Mockups found' ),
-				'not_found_in_trash' => __( 'No Mockups found in Trash' ),
-				'parent' => __( 'Parent Mockup' ),
+				'name' 					=> __( 'Mockup' ),
+				'singular_name' 		=> __( 'Mockup' ),
+				'add_new' 				=> __( 'Add new Mockup' ),
+				'add_new_item' 			=> __( 'Add New Mockup' ),
+				'edit' 					=> __( 'Edit' ),
+				'edit_item' 			=> __( 'Edit Mockup' ),
+				'new_item' 				=> __( 'New Mockup' ),
+				'view' 					=> __( 'View Mockup' ),
+				'view_item' 			=> __( 'View Mockup' ),
+				'search_items' 			=> __( 'Search Mockups' ),
+				'not_found' 			=> __( 'No Mockups found' ),
+				'not_found_in_trash' 	=> __( 'No Mockups found in Trash' ),
+				'parent' 				=> __( 'Parent Mockup' ),
 			),
-			'public' => true,
-			'show_ui' => true,
-			'capability_type' => 'post',
-			'hierarchical' => false,
+			'public'			=> true,
+			'show_ui' 			=> true,
+			'capability_type' 	=> 'post',
+			'hierarchical' 		=> false,
 			'show_in_nav_menus' => true,
-   			'rewrite' => array("slug" => "mockup"),
-   			'supports' => array('title', 'editor', 'thumbnail','page-attributes'),//,'custom-fields'
-   			'menu_icon' => plugins_url( 'img/ico.png' , __FILE__ )
+   			'rewrite' 			=> array("slug" => "mockup"),
+   			'supports' 			=> array('title', 'editor', 'thumbnail','page-attributes'),//,'custom-fields'
+   			'menu_icon' 		=> plugins_url( 'img/ico.png' , __FILE__ )
 		)
+
 	);
+
 }
 
 
-function mockup_meta_box_add()
-{
+function custom_flush_rules(){
+	create_mockup_post_types();
+	flush_rewrite_rules();
+}
+
+
+
+function mockup_meta_box_add() {
 	add_meta_box( 'mockup_meta_box_add_id', 'Mockup settings', 'mockup_meta_box_fields', 'pt_mockup_plugin', 'normal', 'high' );
 }
 
 
-function mockup_meta_box_fields( $post )
+function mockup_meta_box_fields($post)
 {
-	$values = get_post_custom( $post->ID );
+	$values = get_post_custom($post->ID);
 	
 	$background_color = isset( $values['mockup_background_color'] ) ? esc_attr( $values['mockup_background_color'][0] ) : '';
 
-	wp_nonce_field( 'mockup_meta_box_nonce', 'meta_box_nonce' );
-	?>
+	wp_nonce_field('mockup_meta_box_nonce','meta_box_nonce'); ?>
+
 
 	<table class="mockup">
 
 	<?php if(get_post_meta(get_the_ID(), 'mockup_approved', true) == 'approved') { ?>
+
 		<tr>
 
 			<td class="mockup_left"><strong>Mockup</strong></td>
 			<td class="mockup_right">This mockup is approved!</td>
 
 		</tr>
+
 	<?php } ?>
-
-
 
 		<tr>
 
@@ -154,14 +166,11 @@ function mockup_meta_box_fields( $post )
 
 	</table>
 
-<?php //echo get_option('mockup_default_background_color'); ?>
-
 <?php } 
 
 
 
-function mockup_meta_box_save( $post_id )
-{
+function mockup_meta_box_save($post_id) {
 
 	if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 
@@ -185,25 +194,25 @@ function mockup_meta_box_save( $post_id )
 
 function add_custom_taxonomies() {
 	register_taxonomy('relate_mockup', 'pt_mockup_plugin', array(
-		'hierarchical' => true,
-		'labels' => array(
-			'name' => _x( 'Customers', 'taxonomy general name' ),
-			'singular_name' => _x( 'Customer', 'taxonomy singular name' ),
-			'search_items' =>  __( 'Search Customers' ),
-			'all_items' => __( 'All Customers' ),
-			'parent_item' => __( 'Parent Customer' ),
-			'parent_item_colon' => __( 'Parent Customer:' ),
-			'edit_item' => __( 'Edit Customer' ),
-			'update_item' => __( 'Update Customer' ),
-			'add_new_item' => __( 'Add New Customer' ),
-			'new_item_name' => __( 'New Customer Name' ),
-			'menu_name' => __( 'Customers' ),
+		'hierarchical'	=> true,
+		'labels' 		=> array(
+			'name' 					=> __( 'Customers'),
+			'singular_name' 		=> __( 'Customer'),
+			'search_items' 			=> __( 'Search Customers'),
+			'all_items' 			=> __( 'All Customers'),
+			'parent_item' 			=> __( 'Parent Customer'),
+			'parent_item_colon' 	=> __( 'Parent Customer:'),
+			'edit_item' 			=> __( 'Edit Customer'),
+			'update_item' 			=> __( 'Update Customer'),
+			'add_new_item' 			=> __( 'Add New Customer'),
+			'new_item_name' 		=> __( 'New Customer Name'),
+			'menu_name' 			=> __( 'Customers'),
 		),
 
-		'rewrite' => array(
-			'slug' => 'related', 
-			'with_front' => false, 
-			'hierarchical' => true
+		'rewrite' 	=> array(
+			'slug' 			=> 'related', 
+			'with_front' 	=> false, 
+			'hierarchical' 	=> true
 		),
 	));
 }
@@ -213,27 +222,27 @@ function add_custom_taxonomies() {
 
 function filter_by_relate_mockup() {
 	global $typenow;
-	$post_type = 'pt_mockup_plugin';
-	$taxonomy = 'relate_mockup';
+	$post_type = 	'pt_mockup_plugin';
+	$taxonomy = 	'relate_mockup';
 	if ($typenow == $post_type) {
 		$selected = isset($_GET[$taxonomy]) ? $_GET[$taxonomy] : '';
 		$info_taxonomy = get_taxonomy($taxonomy);
 		wp_dropdown_categories(array(
-			'show_option_all' => __("Show All {$info_taxonomy->label}"),
-			'taxonomy' => $taxonomy,
-			'name' => $taxonomy,
-			'orderby' => 'name',
-			'selected' => $selected,
-			'show_count' => true,
-			'hide_empty' => true,
+			'show_option_all' 	=> __("Show All {$info_taxonomy->label}"),
+			'taxonomy' 			=> $taxonomy,
+			'name' 				=> $taxonomy,
+			'orderby' 			=> 'name',
+			'selected' 			=> $selected,
+			'show_count' 		=> true,
+			'hide_empty' 		=> true,
 		));
 	};
 }
 
 function convert_id_to_term_in_query($query) {
 	global $pagenow;
-	$post_type = 'pt_mockup_plugin';
-	$taxonomy = 'relate_mockup';
+	$post_type 		= 'pt_mockup_plugin';
+	$taxonomy 		= 'relate_mockup';
 	$q_vars = &$query->query_vars;
 	if ($pagenow == 'edit.php' && isset($q_vars['post_type']) && $q_vars['post_type'] == $post_type && isset($q_vars[$taxonomy]) && is_numeric($q_vars[$taxonomy]) && $q_vars[$taxonomy] != 0) {
 		$term = get_term_by('id', $q_vars[$taxonomy], $taxonomy);
@@ -329,6 +338,7 @@ endif;
 
 
 function mockup_activation() {
+
 
 	$mockup_related_btn_name = 'mockup_related_btn' ;
 	$mockup_related_btn_default_value = 'Show related Mockups' ;
