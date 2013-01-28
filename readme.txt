@@ -3,7 +3,7 @@ Contributors: Eelco Tjallema
 Tags: mockup, design, presentation, website, screenshot, webdesign
 Requires at least: 3.1
 Tested up to: 3.5
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,9 @@ Go to setting -> permalinks then click on 'Save changes'. That should fix it!
 
 == Changelog ==
 
+= 1.0.6 =
+* Security update.
+
 = 1.0.5 =
 * Twitter Bootstrap header.
 * Popup related Mockups.
@@ -75,6 +78,9 @@ Go to setting -> permalinks then click on 'Save changes'. That should fix it!
 * Mockup Beta.
 
 == Upgrade Notice ==
+
+= 1.0.6 =
+Important security update.
 
 = 1.0.5 =
 The header is now also from Twitter Bootstrap. The popup with related Mockups looks much better and can be orderd. The Metabox is also better looking.

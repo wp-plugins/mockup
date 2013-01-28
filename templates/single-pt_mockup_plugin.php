@@ -46,20 +46,20 @@
 
 		$has_error = false;
 		
-		if(trim($_POST['name']) == '') {
+		if(wp_strip_all_tags($_POST['name']) == '') {
 			$has_error = true;
 		} else {
-			$mockup_name = trim($_POST['name']);
+			$mockup_name = wp_strip_all_tags($_POST['name']);
 		}
 
-		$mockup_comment = trim($_POST['comment']);
+		$mockup_comment = wp_strip_all_tags($_POST['comment']);
 
 		if($has_error != true){
 		
 			add_post_meta(get_the_ID(), 'mockup_remark',$mockup_name.' ('.$time.')<br />'.$mockup_comment);
 
 			//E-mail
-			$from = trim($_POST['name']);
+			$from = wp_strip_all_tags($_POST['name']);
 			$the_title = get_the_title();
 
 			$emailTo = get_option('mockup_email');
