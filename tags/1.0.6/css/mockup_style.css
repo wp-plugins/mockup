@@ -1,0 +1,19 @@
+div#mockup_meta_box_add_id .inside {
+	margin:0;
+	padding:0;
+}
+
+table.mockup {
+	width: 100%;
+}
+
+td.mockup_left {
+	width: 20%;
+	padding:10px;
+}
+
+td.mockup_right {
+	width: 80%;
+	padding:10px;
+	background-color: #fff;	
+}
