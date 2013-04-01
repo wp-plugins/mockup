@@ -40,6 +40,11 @@
 			</tr>
 
 			<tr>
+				<td><p>Close button text</p></td>
+				<td><input type="text" name="mockup_close_btn" value="<?php echo get_option('mockup_close_btn'); ?>" size="40" /></td>
+			</tr>
+
+			<tr>
 				<td><p>Approve button text</p></td>
 				<td><input type="text" name="mockup_approve_btn" value="<?php echo get_option('mockup_approve_btn'); ?>" size="40" /></td>
 			</tr>
@@ -57,6 +62,11 @@
 			<tr>
 				<td><p>Comment message label</p></td>
 				<td><input type="text" name="mockup_comment_message_label" value="<?php echo get_option('mockup_comment_message_label'); ?>" size="40" /></td>
+			</tr>	
+
+			<tr>
+				<td><p>No comments text</p></td>
+				<td><input type="text" name="mockup_comment_no_comments" value="<?php echo get_option('mockup_comment_no_comments'); ?>" size="40" /></td>
 			</tr>	
 
 			<tr>

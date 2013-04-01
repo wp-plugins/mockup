@@ -3,7 +3,7 @@ Contributors: Eelco Tjallema
 Tags: mockup, design, presentation, website, screenshot, webdesign
 Requires at least: 3.1
 Tested up to: 3.5
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ With the Mockup plugin your clients will have the possibility to:
 *   Approve the design
 *   See related designs quickly
 
-On the [website](http://www.estjallema.nl/mockup) you can find [Video tutorials](http://www.estjallema.nl/mockup/video-tutorials), [Demo’s](http://www.estjallema.nl/mockup/demo) and a [FAQ](http://www.estjallema.nl/mockup/faq). If you have any questions you can ask them on Twitter!
+On the [website](http://www.mockupplugin.com) you can find [Demo’s](http://mockupplugin.com/demos/) and a [Step by step guide](http://mockupplugin.com/getting-started/).
 
 The header, buttons and popup come from Twitter Bootstrap.
 
@@ -45,12 +45,14 @@ Go to setting -> permalinks then click on 'Save changes'. That should fix it!
 
 == Screenshots ==
 
-1. 1) How your customer will see the mockup. (I used the apple website as example). [View full screen](http://www.estjallema.nl/mockup/files/2013/01/Home-page-Mockup.png)
-2. 2) The admin page. Here you can rewrite all the text, change to header color en adjust your emailaddress. [View full screen](http://www.estjallema.nl/mockup/files/2013/01/Plugin-Options-Mockup-WordPress.png)
-3. 3) Adding a new mockup. (Use featured image to set your mockup.) [View full screen](http://www.estjallema.nl/mockup/files/2013/01/Edit-Plugin-Mockup-WordPress.png)
-4. 4) List of your customers. [View full screen](http://www.estjallema.nl/mockup/files/2013/01/Customers-Mockup-WordPress.png)
+Visit the website for [screenshots](http://mockupplugin.com/getting-started/) and [demo’s](http://mockupplugin.com/demos/).
 
 == Changelog ==
+
+= 1.0.7 =
+* Remarks are better now.
+* All related mockups in one list.
+* Control over the position.
 
 = 1.0.6 =
 * Security update.
@@ -78,6 +80,9 @@ Go to setting -> permalinks then click on 'Save changes'. That should fix it!
 * Mockup Beta.
 
 == Upgrade Notice ==
+
+= 1.0.7 =
+Eveything looks nicer now.
 
 = 1.0.6 =
 Important security update.

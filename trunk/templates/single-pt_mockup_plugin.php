@@ -55,8 +55,16 @@
 		$mockup_comment = wp_strip_all_tags($_POST['comment']);
 
 		if($has_error != true){
+
+			$i = get_post_meta(get_the_ID(), 'mockup_remark_count_1', true);
+			if($i == '') { $i = 0; } 
+
+			$i++;
 		
-			add_post_meta(get_the_ID(), 'mockup_remark',$mockup_name.' ('.$time.')<br />'.$mockup_comment);
+			update_post_meta(get_the_ID(), 'mockup_remark_count_1',$i);
+			add_post_meta(get_the_ID(), 'mockup_remark_name_1',$mockup_name);
+			add_post_meta(get_the_ID(), 'mockup_remark_date_1',$time);
+			add_post_meta(get_the_ID(), 'mockup_remark_text_1',$mockup_comment);
 
 			//E-mail
 			$from = wp_strip_all_tags($_POST['name']);
@@ -75,7 +83,6 @@
 	}
 
 
-
 	$mockup_img = wp_get_attachment_url(get_post_thumbnail_id(get_the_ID()) );
 	
 	list($width, $height, $type, $attr) = getimagesize($mockup_img);
@@ -91,7 +98,7 @@
 
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta name='robots' content='noindex,nofollow'>
-		<title><?php the_title(); ?> | <?php bloginfo('name'); ?></title>
+		<title><?php echo str_replace('&#10004;','', get_the_title()); ?> | <?php bloginfo('name'); ?></title>
 
 		<link href="<?php echo plugins_url( 'css/bootstrap.min.css' , __FILE__ ); ?>" rel="stylesheet">
 
@@ -103,8 +110,17 @@
 				$bg_color = get_post_meta(get_the_ID(), 'mockup_background_color', true);
 			}
 
-		?>
+		 // Get header color
 
+			if(get_post_meta(get_the_ID(), 'mockup_header', true) == '' && get_option('mockup_header') == 'dark') {
+				$header_color = ' navbar-inverse';
+			} elseif(get_post_meta(get_the_ID(), 'mockup_header', true) == 'dark') {
+				$header_color = ' navbar-inverse';
+			} else {
+				$header_color = '';
+			}
+
+		?>
 		<style>
 		
 			body { 
@@ -114,7 +130,7 @@
 				background-color: <?php echo '#'.$bg_color ?>;
 				height: <?php echo $height.'px'; ?>;
 				margin: 40px 0 -40px 0;
-			}	
+			}
 
 			.navbar .btn-success {
 				margin-right:10px;
@@ -125,6 +141,26 @@
 				margin:6px 10px 0 0;
 			}
 
+			form.mockup_remark {
+				display: block;
+				float: left;
+
+				max-width: 40%;
+			}
+
+			div.comments {
+				float: right;
+				overflow-y: scroll;
+
+				width: 60%;
+				height: 300px;
+			}
+
+			div.comments div.well {
+				width: 80%;
+				margin-right: 5px;
+				padding:5px;
+			}
 
 		</style>
 
@@ -139,11 +175,9 @@
 
 		<div class="header">
 
-
-
 		</div>
 
-			<div class="navbar navbar-fixed-top <?php if(get_option('mockup_header') == 'dark') { echo ' navbar-inverse"'; } ?>">
+			<div class="navbar navbar-fixed-top<?php echo $header_color; ?>">
 
 				<div class="navbar-inner">
 
@@ -155,7 +189,7 @@
 							</li>
 						<?php } ?>
 
-						<?php $content = get_the_content(); if(!$content == '') { ?>
+						<?php if(!$content == '') { ?>
 						<li>
 							<a href="#description" data-toggle="modal"><?php echo get_option('mockup_description_btn'); ?></a>
 						</li>
