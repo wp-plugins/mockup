@@ -4,7 +4,7 @@
 	Plugin Name:    MockUp
 	Plugin URI:     http://www.mockupplugin.com
 	Description:    MockUp helps you to present your designs professionally.
-	Version:        1.1
+	Version:        1.1.0
 	Author:         Eelco Tjallema
 	Author URI:     http://www.estjallema.nl
 	License:        GPL2
