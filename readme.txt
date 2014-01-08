@@ -1,28 +1,26 @@
 === Mockup ===
 Contributors: Eelco Tjallema
 Tags: mockup, design, presentation, website, screenshot, webdesign
-Requires at least: 3.1
-Tested up to: 3.5
-Stable tag: 1.0.7
+Requires at least: 3.5
+Tested up to: 3.8
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The professional way to present your Web Designs!
+The professional way to present your designs!
 
 == Description ==
 
-Normally you can never be sure if your client is viewing your web designs properly. Now you can take control over the presentation. The first impression is the most important! With this plugin it is surprisingly easy to present your web designs the right way.
+Normally you can never be sure if your client is viewing your designs properly. Now you can take control over the presentation. With this plugin it's surprisingly easy to present your web designs the right way.
 
-With the Mockup plugin your clients will have the possibility to:
+With the Mockup plugin your customers will have the possibility to:
 
-*   Read your comments
-*   Add remarks
-*   Approve the design
-*   See related designs quickly
+*   Approve the design.
+*   Add feedback to your design.
+*   See related designs quickly.
+*   See the description you made.
 
-On the [website](http://www.mockupplugin.com) you can find [Demo’s](http://mockupplugin.com/demos/) and a [Step by step guide](http://mockupplugin.com/getting-started/).
-
-The header, buttons and popup come from Twitter Bootstrap.
+On the [website](http://www.mockupplugin.com) you can find [Demo’s](http://mockupplugin.com/demos/).
 
 
 == Installation ==
@@ -33,21 +31,51 @@ The header, buttons and popup come from Twitter Bootstrap.
 
 == Frequently Asked Questions ==
 
+= How do I get started? =
+
+*Change the custom settings.* After the first installation you can change the settings to your wishes. Rename everything your client will see and control the layout (`Setting -> MockUp`).
+
+*Make a customer.* This works the same as categories in posts. It links the mockups together.
+
+*Make a page for the mockup.* Give the page a clear title (like: Home page or Blog). Write a description. Upload the mockup via featured image. Then publish the page and you are done!
+
+
+= I don't see MockUp in the admin menu! =
+
+The normal position is on the bottom of the admin menu.
+If you can’t find it there or you don’t want it there, change the menu position.
+
+This can be done on the MockUp Settings page (`Setting -> MockUp`).
+
+
 = How do I add a image? =
 
-Adding a new mockup works the same as adding a new post or page.
-After you did this you can use 'Featured Image' to add a Image.
+Adding a new mockup works the same as adding a new post or page. After you did this you can use `Featured Image` to add a Image.
 
-= I get a 404 page =
 
-This is a permalink problem. You can solve it by resaving your permalinks.
-Go to setting -> permalinks then click on 'Save changes'. That should fix it!
+= I get a 404 page! =
+
+This is a permalink problem. You can solve it by re-saving your permalinks. Go to `setting -> permalinks` then click on `Save changes`. That should fix it!
+
+
+= My problem is not here! =
+
+Go to the [support](http://mockupplugin.com/support/) page and ask it.
+
 
 == Screenshots ==
 
-Visit the website for [screenshots](http://mockupplugin.com/getting-started/) and [demo’s](http://mockupplugin.com/demos/).
+Visit the website for for working [demo’s](http://mockupplugin.com/demos/).
 
 == Changelog ==
+
+= 1.1 =
+* Ready for WordPress 3.8
+* Not using a light-box anymore, but a box that slides in from the right.
+* Give you more options and control over the email settings.
+* If a mockup get approved it will not add a ✔ to the title anymore, but will use a admin column.
+* The amount of comments is now also in the admin columns.
+* Use Bootstrap 3.0.3.
 
 = 1.0.7 =
 * Remarks are better now.
@@ -81,11 +109,14 @@ Visit the website for [screenshots](http://mockupplugin.com/getting-started/) an
 
 == Upgrade Notice ==
 
+= 1.1 =
+Only update if you are using WordPress 3.5 or higher.
+
 = 1.0.7 =
-Eveything looks nicer now.
+Everything looks nicer now.
 
 = 1.0.6 =
 Important security update.
 
 = 1.0.5 =
-The header is now also from Twitter Bootstrap. The popup with related Mockups looks much better and can be orderd. The Metabox is also better looking.
+The header is now also from Twitter Bootstrap. The popup with related Mockups looks much better and can be ordered. The Metabox is also better looking.
