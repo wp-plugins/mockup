@@ -4,7 +4,7 @@
 	Plugin Name:    MockUp
 	Plugin URI:     http://www.mockupplugin.com
 	Description:    MockUp helps you to present your designs professionally.
-	Version:        1.1.0
+	Version:        1.1.1
 	Author:         Eelco Tjallema
 	Author URI:     http://www.estjallema.nl
 	License:        GPL2
@@ -186,7 +186,9 @@ function mockup_admin_style() {
 	wp_register_style('mockup_admin_stylesheet', plugins_url('inc/stylesheet.css', __FILE__), false, '1.1.0');
 	wp_enqueue_style('mockup_admin_stylesheet');
 
-	#wp_enqueue_script( 'mockup_admin_script', plugins_url('inc/script.js', __FILE__), false, '1.1.0');
+	// @link: http://make.wordpress.org/core/2012/11/30/new-color-picker-in-wp-3-5/
+	wp_enqueue_style('wp-color-picker');
+	wp_enqueue_script('mockup_admin_script', plugins_url('inc/script.js', __FILE__ ), array( 'wp-color-picker' ), false, true);	
 }
 
 
@@ -393,22 +395,24 @@ function mockup_comments_metabox_callback($post) { ?>
 
 function mockup_info_metabox_callback($post) {
 
-	wp_nonce_field( 'mockup_info_metabox_callback', 'mockup_info_metabox_callback_nonce' );
+	wp_nonce_field('mockup_info_metabox_callback', 'mockup_info_metabox_callback_nonce');
 
 	// Status
 	$post_status = get_post_status($post->ID);
+
 	if(get_post_meta($post->ID, 'mockup_status', true ) == 'approved') {
 
-		$name = get_post_meta($post->ID, 'mockup_approve_name', true );
+		$name = get_post_meta($post->ID, 'mockup_approve_name', true);
+		$post_status = 'approved';
 
 		if(!empty($name)) {
-			$post_status = sprintf(__('Approved by %s', 'MockUp'), $name);
+			$post_status_text = sprintf(__('Approved by %s', 'MockUp'), $name);
 		} else {
-			$post_status = __('Approved', 'MockUp');
+			$post_status_text = __('Approved', 'MockUp');
 		}
-		
+
 	} elseif($post_status == 'publish') {
-		$post_status = __('Published', 'MockUp');
+		$post_status_text = __('Published', 'MockUp');
 	} else {
 		$post_status = NULL;
 	}
@@ -445,10 +449,16 @@ function mockup_info_metabox_callback($post) {
 		$mockup_email_settings = get_post_meta($post->ID, 'mockup_email_settings', true );
 	}
 
-	// Link to the MockUp options page
-	$mockup_settings_url = '<a href="'.admin_url("options-general.php?page=mockup_options").'">general settings</a>';
+	// Email
+	$mockup_email = get_post_meta($post->ID, 'mockup_email', true );
+	if(empty($mockup_email)) {
+		$mockup_email = get_option('mockup_email');
+	} else {
+		$mockup_email = get_post_meta($post->ID, 'mockup_email', true );
+	}
 
-?>
+	// Link to the MockUp options page
+	$mockup_settings_url = '<a href="'.admin_url("options-general.php?page=mockup_options").'">general settings</a>'; ?>
 
 	<div class="table table_content">
 
@@ -459,11 +469,18 @@ function mockup_info_metabox_callback($post) {
 				<?php if($post_status != NULL) { ?>
 					<tr>
 						<td width="20%"><span><strong>Status</strong></span></td>
-						<td><?php echo $post_status ?></td>
+						<td><?php echo $post_status_text; ?></td>
 					</tr>
-				<?php } ?>
 
-				<?php if($post_status == __('Published', 'MockUp')) { ?>
+					<?php if($post_status == 'approved') { ?>
+
+						<tr>
+							<td><span><strong>Change status</strong></span></td>
+							<td><label><input type="checkbox" id="mockup_unapprove" name="mockup_unapprove" > Remove approval.</label></td>
+						</tr>
+
+					<?php } ?>
+
 					<tr>
 						<td><span><strong>URL</strong></span></td>
 						<td><?php the_permalink(); ?></td>
@@ -471,8 +488,8 @@ function mockup_info_metabox_callback($post) {
 				<?php } ?>
 
 				<tr>	
-					<td><span><strong>Background Color</strong></span></td>
-					<td><input type="text" id="mockup_background_color" name="mockup_background_color" value="<?php echo esc_attr($mockup_background_color); ?>" maxlength="6"  width="300" style="width: 300px"></td>
+					<td valign="top"><span><strong>Background Color</strong></span></td>
+					<td><input type="text" id="mockup_background_color" name="mockup_background_color" value="<?php echo esc_attr($mockup_background_color); ?>" class="mockup-colorpicker" data-default-color="<?php echo get_option('mockup_default_background_color'); ?>" /></td>
 				</tr>
 
 				<tr>
@@ -505,6 +522,14 @@ function mockup_info_metabox_callback($post) {
 							<option value="email_comments"<?php if($mockup_email_settings == 'email_comments') { echo ' selected="email_comments"'; } ?>><?php _e('Email me only when comments are made', 'MockUp'); ?></option>
 							<option value="email_never"<?php if($mockup_email_settings == 'email_never') { echo ' selected="email_never"'; } ?>><?php _e('Never email me', 'MockUp'); ?></option>
 						</select>
+					</td>
+				</tr>
+
+				<tr>
+					<td><span><strong>Email Address</strong></span></td>
+					<td>
+						<input type="text" id="mockup_email" name="mockup_email" value="<?php echo $mockup_email; ?>" width="300" style="width: 300px" />
+						<p class="description"><?php _e('Comma separate email addresses for multiple recipients'); ?></p>
 					</td>
 				</tr>
 
@@ -552,18 +577,29 @@ function mockup_save_postdata($post_id) {
 		return $post_id;
 	}
 
+
 	// Sanitize user input.
 	$mockup_background_color 	= sanitize_text_field($_POST['mockup_background_color']);
 	$mockup_comments 			= sanitize_text_field($_POST['mockup_comments']);
 	$mockup_header 				= sanitize_text_field($_POST['mockup_header']);
 	$mockup_email_settings 		= sanitize_text_field($_POST['mockup_email_settings']);
+	$mockup_email 		 		= trim(sanitize_text_field($_POST['mockup_email']));
 
 
 	// Update the meta field in the database.
-	update_post_meta( $post_id, 'mockup_background_color', $mockup_background_color );
-	update_post_meta( $post_id, 'mockup_comments', $mockup_comments );
-	update_post_meta( $post_id, 'mockup_header', $mockup_header );
-	update_post_meta( $post_id, 'mockup_email_settings', $mockup_email_settings );
+	update_post_meta($post_id, 'mockup_background_color', $mockup_background_color );
+	update_post_meta($post_id, 'mockup_comments', $mockup_comments );
+	update_post_meta($post_id, 'mockup_header', $mockup_header );
+	update_post_meta($post_id, 'mockup_email_settings', $mockup_email_settings );
+	update_post_meta($post_id, 'mockup_email', $mockup_email );
+
+
+	if(isset($_POST['mockup_unapprove'])) {
+
+		delete_post_meta($post_id, 'mockup_status');
+		delete_post_meta($post_id, 'mockup_approve_name');
+		delete_post_meta($post_id, 'mockup_approved_time');
+	}
 }
 
 // Update most meta
@@ -572,7 +608,7 @@ function mockup_save_postdata($post_id) {
 add_action('save_post', 'mockup_add_version');
 
 function mockup_add_version($post_id) {
-	add_post_meta($post_id, 'mockup_update', '110', true);
+	add_post_meta($post_id, 'mockup_update', '111', true);
 }
 
 
@@ -669,7 +705,7 @@ function mockup_add_options() {
 	add_option('mockup_comment_no_comments',        __( 'Here you can add your comments on this MockUp.',   'MockUp' ) );
 	add_option('mockup_approved_text',              __( 'You approved this MockUp',                         'MockUp' ) );
 
-	add_option('mockup_default_background_color', 'ffffff');
+	add_option('mockup_default_background_color', '#ffffff');
 	add_option('mockup_header', 'navbar-default' );
 
 	$mockup_email_default_value = get_option('admin_email');

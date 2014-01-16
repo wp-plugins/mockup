@@ -68,7 +68,9 @@
 		// Email
 		if($mockup_email_settings == 'email_always' || $mockup_email_settings == 'email_approved') {
 
-			$to 		= get_option('mockup_email');
+			$to = get_post_meta(mockup_id, 'mockup_email', true );
+			if(empty($to)) { $to = get_option('mockup_email'); }
+
 			$subject	= sprintf(__('Mockup %s is approved', 'MockUp'), get_the_title());
 			$message	= sprintf(__('Your mockup %s has been approved by %s', 'MockUp'), get_the_title(), $name);
 
@@ -102,11 +104,13 @@
 		// Email
 		if($mockup_email_settings == 'email_always' || $mockup_email_settings == 'email_comments') {
 
-			$to 		= get_option('mockup_email');
+			$to = get_post_meta(mockup_id, 'mockup_email', true );
+			if(empty($to)) { $to = get_option('mockup_email'); }
+
 			$subject	= sprintf(__('%s made comments on Mockup %s', 'MockUp'), $name, get_the_title());
 			$message	= $comment;
 
-			wp_mail( $to, $subject, $message);
+			wp_mail($to, $subject, $message);
 		}
 
 	}
@@ -116,7 +120,9 @@
 	function check_bg_color($bg_color) {
 
 		// Check if background color is hex color string without hash
-		if(preg_match('/^[a-f0-9]{6}$/i', $bg_color)) {
+		if(preg_match('/^#[a-f0-9]{6}$/i', $bg_color)) {
+			return $bg_color;
+		} elseif(preg_match('/^[a-f0-9]{6}$/i', $bg_color)) {
 			return $bg_color = '#'.$bg_color;
 		} else {
 			return $bg_color = '#ffffff';
@@ -134,7 +140,6 @@
 		$bg_color = get_post_meta(mockup_id, 'mockup_background_color', true);
 		$bg_color = check_bg_color($bg_color);
 	}
-
 
 	// Get header color
 	if(get_post_meta(mockup_id, 'mockup_header', true) != '') {
