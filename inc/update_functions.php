@@ -34,5 +34,5 @@ function mockup_update_107($id) {
 	update_post_meta($id, 'mockup_header', 'navbar-inverse', 'dark');
 
 	// Loging the update
-	update_post_meta($id, 'mockup_update', '110');
+	update_post_meta($id, 'mockup_update', '111');
 }

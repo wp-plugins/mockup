@@ -3,7 +3,7 @@ Contributors: Eelco Tjallema
 Tags: mockup, design, presentation, website, screenshot, webdesign
 Requires at least: 3.5
 Tested up to: 3.8
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,7 +69,12 @@ Visit the website for for working [demo’s](http://mockupplugin.com/demos/).
 
 == Changelog ==
 
-= 1.1 =
+= 1.1.1 =
+* WordPress color pickers
+* Option to unapprove a mockup
+* Option to override the email address for each mockup
+
+= 1.1.0 =
 * Ready for WordPress 3.8
 * Not using a light-box anymore, but a box that slides in from the right.
 * Give you more options and control over the email settings.
