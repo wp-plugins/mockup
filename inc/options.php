@@ -113,8 +113,8 @@
 			</tr>			
 				
 				<tr>
-					<td><span><?php _e('Default background color', 'MockUp'); ?></span></td>
-					<td><input type="text" name="mockup_default_background_color" value="<?php echo get_option('mockup_default_background_color'); ?>" style="width: 300px;" /></td>
+					<td valign="top"><span><?php _e('Default background color', 'MockUp'); ?></span></td>
+					<td><input type="text" name="mockup_default_background_color" class="mockup-colorpicker" data-default-color="#ffffff" value="<?php echo get_option('mockup_default_background_color'); ?>" /></td>
 				</tr>
 
 				<tr>
@@ -130,7 +130,10 @@
 
 				<tr>
 					<td><span><?php _e('E-mail adres', 'MockUp'); ?></span></td>
-					<td><input type="text" name="mockup_email" value="<?php echo get_option('mockup_email'); ?>" style="width: 300px;" /></td>
+					<td>
+						<input type="text" name="mockup_email" value="<?php echo get_option('mockup_email'); ?>" style="width: 300px;" />
+						<p class="description"><?php _e('Comma separate email addresses for multiple recipients'); ?></p>
+					</td>
 				</tr>
 
 				<tr>
