@@ -1,4 +1,4 @@
-=== Mockup ===
+=== MockUp ===
 Contributors: Eelco Tjallema
 Tags: mockup, design, presentation, website, screenshot, webdesign
 Requires at least: 3.5
