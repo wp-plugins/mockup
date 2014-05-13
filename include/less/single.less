@@ -1,0 +1,321 @@
+// Variables
+// ---------
+
+// Colors
+@black: 		#000;
+@white: 		#fff;
+
+@gray-darker:	lighten(#000, 13.5%); // #222
+@gray-dark: 	lighten(#000, 20%);   // #333
+@gray: 			lighten(#000, 33.5%); // #555
+@gray-light: 	lighten(#000, 60%);   // #999
+@gray-lighter: 	lighten(#000, 93.5%); // #eee
+
+@primary: 		#5bc0de;
+@success: 		#5cb85c;
+@warning: 		#f0ad4e;
+@danger: 		#d9534f;
+
+
+// Links
+@link: 			@primary;
+@link-hover: 	darken(@link, 15%);
+
+// Typography
+@font-family:  	'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+@font-base:		14px;
+@font-large:	ceil(@font-base * 1.25); // ~18px
+@font-small:	ceil(@font-base * 0.85); // ~12px
+
+@line-height: 	(@font-base + 4); // 16px
+
+// Image path
+@img: 			'../../include/img/';
+
+// Settings
+@width: 		220px;
+
+@item_size: 	45px;
+@item_margin: 	5px;
+
+@border-radius: 4px;
+@border-width: 	1px;
+
+@padding: 		20px;
+
+
+
+// Include files
+// -------------
+@import 'reset.less';
+@import 'font.less';
+@import 'tooltip.less';
+
+
+
+// Functions
+// ---------
+.transition(@property, @time) {
+	-webkit-transition: @property @time ease;
+	-moz-transition: @property @time ease;
+	-ms-transition: @property @time ease;
+	-o-transition: @property @time ease;
+	transition: @property @time ease;
+}
+
+.border-settings() {
+	-webkit-border-radius:  @border-radius;
+	border-radius:  @border-radius;
+}
+
+.input-border(@var) when (lightness(@var) >= 50%) {
+	border: @border-width solid darken(@bg-color, 30%);
+	.border-settings();
+}
+.input-border(@var) when (lightness(@var) < 50%) {
+	border: @border-width solid lighten(@bg-color, 30%);
+	.border-settings();
+}
+
+.slidebox_content(@bg-color, @font-color) {
+
+	div.content {
+		position: relative;
+		float: left;
+		width: @width;
+		height: 100%;
+		background-color: @bg-color;
+
+		div#load {
+			float: left;
+			width: (@width - (@padding * 2));
+			height: 100%;
+			padding: @padding;
+			padding-top: (@padding * 2.5);
+
+			div.loading {
+				@height: 60px;
+
+				float: left;
+				width: 100%;
+				height: @height;
+				margin-top: @height;
+				text-align: center;
+				
+				i.fa {
+					font-size: @height;
+					color: @font-color;
+				}
+			}
+
+			h1 {
+				font-family: @font-family;
+				font-size: @font-large;
+				color: @font-color;
+				margin-bottom: (@padding * 0.5);
+			}
+
+			p,
+			label {
+				font-family: @font-family;
+				font-size: @font-base;
+				line-height: @line-height;
+				color: @font-color;
+				margin-bottom: (@padding * 0.5);
+
+				strong {
+					font-weight: 700;
+				}
+
+				em {
+					font-style: italic;
+				}
+			}
+
+			a {
+				font-family: @font-family;
+				font-size: @font-base;
+				line-height: @line-height;
+				color: @link;
+				text-decoration: underline;
+				outline: 0;
+
+				&:hover {
+					color: @link-hover;
+				}
+			}
+
+			li {
+				color: @font-color;
+
+				a {
+					color: @link;
+					text-decoration: none;
+
+					&:hover {
+						color: @link-hover;
+						text-decoration: underline;
+					}
+				}
+			
+			}
+
+
+			.field {
+				width: (@width - (2 * @padding) - (2 * 5) - (2 * @border-width));
+				margin: 0 0 (@padding * 0.5) 0;
+				padding: 5px;
+				font-family: @font-family;
+				font-size: @font-small;
+				color: @gray;
+				.input-border(@bg-color);
+				.transition(background, 2s);
+				resize: vertical;
+	
+				&.error {
+					border: @border-width solid @danger;
+					background-color: lighten(@danger, 35%)
+				}
+			}
+
+			button {
+				display: block;
+				width: 100%;
+				padding: 5px 10px;
+				background-color: @success;
+				border: none;
+				.border-settings();
+				font-family: @font-family;
+				font-size: @font-base;
+				font-weight: 700;
+				color: @white;
+				.transition(background, 2s);
+
+				&:hover {
+					cursor: pointer;
+					background-color: lighten(@success, 10%);
+				}
+			}
+
+			div.comment {
+				float: left;
+				width: (@width - (@padding * 2) - ((@padding * 0.5) * 2));
+				height: auto;
+				margin-top: @padding;
+				padding: (@padding * 0.5);
+				padding-bottom: 0;
+				.border-settings();
+				background-color: @white;
+
+				p {
+					font-size: @font-small;
+					color: @gray;
+				
+					a {
+						font-size: @font-small;
+						color: @link;
+						text-decoration: none;
+	
+						&:hover {
+							color: @link-hover;
+							text-decoration: underline;
+						}
+					}
+
+					span.time {
+						font-style: italic;
+						color: lighten(@gray, 15%);
+					}
+				}
+
+			}
+		}
+
+		a#close {
+			position: absolute;
+			display: block;
+			top: (@padding * 0.5);
+			right: @padding;
+			font-size: @font-base;
+			line-height: @font-base;
+			color: @font-color;
+			text-decoration: none;
+			.transition(all, 500ms);
+
+			&:hover {
+				color: @danger;
+			}
+		}
+
+		div.navbar {
+			position: absolute;
+			top: (@padding * 2);
+			right: -(@item_size + @item_margin);
+			width: (@item_size + @item_margin);
+			height: auto;
+			-webkit-border-radius:  0 @border-radius @border-radius 0;
+			border-radius:  0 @border-radius @border-radius 0;
+			background-color: @bg-color;
+			border-left: 0;
+
+			a {
+				position: relative;
+				display: block;
+				float: left;
+				height: @item_size;
+				width: @item_size;
+				margin: 0 @item_margin 0 0;
+				background-position: center center;
+				background-repeat: no-repeat;
+				text-align: center;
+				color: @font-color;
+				outline: 0;
+				.transition(color, 400ms);
+
+				&:hover {
+					color: darken(@font-color, 20%);
+				}
+
+				&.active {
+					color: darken(@font-color, 20%);
+				}
+
+				i.fa {
+					font-size: (@item_size * 0.6);
+					line-height: @item_size;
+				}
+			}
+		}
+	}
+}
+
+
+
+// Output
+// ------
+html {
+	min-height: 100%;
+
+	body {
+		min-height: 100%;
+		background-repeat: no-repeat;
+
+		div.slidebox {
+			position: fixed;
+			top: 0;
+			left: 0;
+			height: 100%;
+			width: (@width + @item_size + @item_margin);
+			margin-left: -(@width);
+
+			&.slidebox_dark {
+				.slidebox_content(@gray, lighten(@gray, 70%));
+			}
+
+			&.slidebox_light {
+				.slidebox_content(@gray-lighter, darken(@gray-lighter, 60%));
+			}
+		}
+	}
+}
