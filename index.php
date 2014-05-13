@@ -3,7 +3,7 @@
 Plugin Name: MockUp
 Plugin URI: http://www.mockupplugin.com
 Description: MockUp helps you to present your designs professionally.
-Version: 1.2.0
+Version: 1.2.1
 Author: Eelco Tjallema
 Author URI: http://www.estjallema.nl
 License: GPL2
@@ -22,7 +22,7 @@ if(!class_exists('MockUp')) {
 			// Vars
 			$this->settings = array(
 				'dir' 				=> __DIR__,
-				'version'			=> '1.2.0',
+				'version'			=> '1.2.1',
 				'upgrade_version'	=> '0.0.7',
 				'wp_version'		=> get_bloginfo('version'),
 				'option_group' 		=> 'mockup_options'
