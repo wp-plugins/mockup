@@ -3,11 +3,12 @@ Contributors: Eelco Tjallema
 Tags: mockup, design, presentation, website, screenshot, webdesign, wireframe, logo, showcase, portfolio
 Requires at least: 3.5.0
 Tested up to: 3.9
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 The professional way to present your designs!
+
 
 
 
@@ -77,6 +78,16 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 == Changelog ==
 
+= 1.3.0 =
+* Better metaboxes.
+* Password protection.
+* Links in emails.
+
+
+= 1.2.1 =
+* Small bug fix
+
+
 = 1.2.0 =
 * Ready for WordPress 3.9+
 * The frontend is improved with a better slidebox and Ajax.
@@ -140,14 +151,23 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 
 
+
 == Upgrade Notice ==
+
+= 1.3.0 =
+Some cool improvements.
+
+
+= 1.2.1 =
+Bug fix
+
 
 = 1.2.0 =
 The Sildebox will be much better.
 
 
 = 1.1.1 =
-Some small improvements
+Some small improvements.
 
 
 = 1.1.0 =

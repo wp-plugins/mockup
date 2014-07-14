@@ -24,6 +24,8 @@
 
 			$subject = sprintf(__('Mockup %s is approved', 'MockUp'), get_the_title($id));
 			$message = sprintf(__('Your MockUp %s has been approved by %s', 'MockUp'), get_the_title($id), $name);
+			$message .= "\n\n";
+			$message .= sprintf(__('Link: %s', 'MockUp'), get_permalink($id));
 
 			wp_mail($to, $subject, $message);
 		}

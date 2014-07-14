@@ -27,6 +27,8 @@
 
 			$subject = sprintf(__('%s made comments on MockUp %s', 'MockUp'), $name, get_the_title($id));
 			$message = $text;
+			$message .= "\n\n";
+			$message .= sprintf(__('Link: %s', 'MockUp'), get_permalink($id));
 
 			wp_mail($to, $subject, $message);
 		}

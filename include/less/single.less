@@ -291,6 +291,64 @@
 }
 
 
+.password_form(@bg-color, @font-color) {
+
+	form.mockup_password {
+		display: block;
+		max-width: 360px;
+		margin: 10% auto 0 auto;
+		padding: 20px;
+		text-align: center;
+		background-color: @bg-color;
+		.border-settings();
+
+
+		i.fa {
+			color: @font-color;
+			font-size: @font-large;
+		}
+
+		p {
+			font-family: @font-family;
+			font-size: @font-large;
+			line-height: (@font-large * 1.4);
+			color: @font-color;
+			margin-bottom: (@padding * 0.5);
+		}
+
+		input.submit_password {
+			width: auto;
+			padding: 5px 10px;
+			background-color: @success;
+			border: none;
+			.border-settings();
+			font-family: @font-family;
+			font-size: @font-base;
+			font-weight: 700;
+			color: @white;
+			.transition(background, 2s);
+
+			&:hover {
+				cursor: pointer;
+				background-color: lighten(@success, 10%);
+			}
+		}
+
+		input.field {
+			width: (@width - (2 * @padding) - (2 * 5) - (2 * @border-width));
+			margin: 0 0 (@padding * 0.5) 0;
+			padding: 5px;
+			font-family: @font-family;
+			font-size: @font-small;
+			color: @gray;
+			.input-border(@bg-color);
+			.transition(background, 2s);
+		}
+
+	}
+}
+
+
 
 // Output
 // ------
@@ -316,6 +374,15 @@ html {
 			&.slidebox_light {
 				.slidebox_content(@gray-lighter, darken(@gray-lighter, 60%));
 			}
+		}
+
+
+		&.form_dark {
+			.password_form(@gray, lighten(@gray, 70%));
+		}
+
+		&.form_light {
+			.password_form(@gray-lighter, darken(@gray-lighter, 60%));
 		}
 	}
 }

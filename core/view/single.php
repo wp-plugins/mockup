@@ -48,6 +48,23 @@ class Single extends MockUp {
 		$this->bgcolor = get_post_meta($this->postID, '_mockup_background_color_1', true);
 		$this->menucolor = get_post_meta($this->postID, '_mockup_slidebox_1', true);
 	}
+
+
+	public function mockup_password_form() {
+
+		global $post;
+
+		$label = 'pwbox-'.(empty($post->ID ) ? rand() : $post->ID);
+
+		$form = '<form class="mockup_password" action="'.esc_url(site_url('wp-login.php?action=postpass', 'login_post')).'" method="post">';
+		$form .= '<i class="fa fa-lock"></i>';
+		$form .= '<p>'.get_option('mockup_locked_title').'</p>';
+		$form .= '<input class="field" name="post_password" id="'.$label.'" type="password" size="20" maxlength="20" /><br />';
+		$form .= '<input type="submit" class="submit_password" name="Submit" value="'.get_option('mockup_send_btn').'" />';
+		$form .= '</form>';
+
+		return $form;
+	}
 }
 
 
@@ -80,48 +97,60 @@ $single = new Single; ?>
 
 	</head>
 
-	<body style="height: <?php echo $single->height.'px'; ?>; background-image: url('<?php echo $single->url; ?>'); background-position:<?php echo $single->position; ?> ; background-color: <?php echo $single->bgcolor; ?>;">
+	<?php if(post_password_required()) { ?>
 
-		<div class="slidebox <?php if(!empty($single->menucolor)) echo 'slidebox_',$single->menucolor; else echo 'slidebox_light'; ?>">
+		<body class="<?php if(!empty($single->menucolor)) echo 'form_',$single->menucolor; else echo 'form_light'; ?>">
 
-			<div class="content">
+			<?php echo $single->mockup_password_form(); ?>
 
-				<a href="#" title="<?php _e('Close', 'MockUp'); ?>" id="close" class="show-title"><i class="fa fa-arrow-circle-left"></i></a>
+		</body>
 
-				<div id="load">
+	<?php } else { ?>
 
-					<div class="loading"></div>
+		<body style="height: <?php echo $single->height.'px'; ?>; background-image: url('<?php echo $single->url; ?>'); background-position:<?php echo $single->position; ?> ; background-color: <?php echo $single->bgcolor; ?>;">
 
+			<div class="slidebox <?php if(!empty($single->menucolor)) echo 'slidebox_',$single->menucolor; else echo 'slidebox_light'; ?>">
+
+				<div class="content">
+
+					<a href="#" title="<?php _e('Close', 'MockUp'); ?>" id="close" class="show-title"><i class="fa fa-arrow-circle-left"></i></a>
+
+					<div id="load">
+
+						<div class="loading"></div>
+
+					</div>
+
+					<div class="navbar">
+
+						<?php
+
+						if(!empty($single->description)) {
+
+							echo '<a href="#" title="'.get_option('mockup_description_btn').'" id="description" class="toggle show-title"><i class="fa fa-pencil-square-o"></i></a>';
+						} 
+
+						if($single->comments == 'enable') {
+
+							echo '<a href="#" title="'.get_option('mockup_comment_btn').'" id="comment" class="toggle show-title"><i class="fa fa-comments-o"></i></a>';
+						} 
+
+						if($single->terms && !is_wp_error($single->terms)) {
+
+							echo '<a href="#" title="'.get_option('mockup_related_btn').'" id="related" class="toggle show-title"><i class="fa fa-list"></i></a>';
+
+						} ?>
+
+						<a href="#" title="<?php echo get_option('mockup_approve_btn'); ?>" id="approve" class="toggle show-title"><i class="fa fa-check-square-o"></i></a>
+
+					</div>
+					
 				</div>
 
-				<div class="navbar">
-
-					<?php
-
-					if(!empty($single->description)) {
-
-						echo '<a href="#" title="'.get_option('mockup_description_btn').'" id="description" class="toggle show-title"><i class="fa fa-pencil-square-o"></i></a>';
-					} 
-
-					if($single->comments == 'enable') {
-
-						echo '<a href="#" title="'.get_option('mockup_comment_btn').'" id="comment" class="toggle show-title"><i class="fa fa-comments-o"></i></a>';
-					} 
-
-					if($single->terms && !is_wp_error($single->terms)) {
-
-						echo '<a href="#" title="'.get_option('mockup_related_btn').'" id="related" class="toggle show-title"><i class="fa fa-list"></i></a>';
-
-					} ?>
-
-					<a href="#" title="<?php echo get_option('mockup_approve_btn'); ?>" id="approve" class="toggle show-title"><i class="fa fa-check-square-o"></i></a>
-
-				</div>
-				
 			</div>
 
-		</div>
+		</body>
 
-	</body>
+	<?php } // End of password protection ?>
 
 </html>
