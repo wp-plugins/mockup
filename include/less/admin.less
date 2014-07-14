@@ -20,30 +20,28 @@ div.postbox-container {
 		border-spacing: 0;
 	}
 
+	div#mockup_metabox_images {
 
-	div#mockup_metabox_content {
-
-		div.inside {
-			.inside();
+		p.mockup_show {
+			display: block;
 		}
 
-		td {
-			.td();
+		p.mockup_hide {
+			display: none;
+		}
 
-			img.mockup_show {
-				display: block;
-				width: 100%;
-			}
 
-			textarea {
-				display: block;
-				width: 100%;
-				min-height: 180px;
-			}
+		a.delete_mockup {
+			color: #a00;
 
-			.mockup_none {
-				display: none !important;
+			&:hover {
+				color: #dd0101;
 			}
+		}
+
+		img {
+			-webkit-box-shadow: 0 0 2px 2px #8C8C8C;
+			box-shadow: 0 0 2px 2px #8C8C8C;
 		}
 	}
 

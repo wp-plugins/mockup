@@ -3,9 +3,9 @@
 Plugin Name: MockUp
 Plugin URI: http://www.mockupplugin.com
 Description: MockUp helps you to present your designs professionally.
-Version: 1.2.1
+Version: 1.3.0
 Author: Eelco Tjallema
-Author URI: http://www.estjallema.nl
+Author URI: http://www.estjallema.nl/en
 License: GPL2
 */
 if(!class_exists('MockUp')) {
@@ -22,9 +22,9 @@ if(!class_exists('MockUp')) {
 			// Vars
 			$this->settings = array(
 				'dir' 				=> __DIR__,
-				'version'			=> '1.2.1',
+				'version'			=> '1.3.0',
 				'upgrade_version'	=> '0.0.7',
-				'wp_version'		=> get_bloginfo('version'),
+				'wp_version'		=> str_replace('.', '', get_bloginfo('version')),
 				'option_group' 		=> 'mockup_options'
 			);
 
@@ -45,6 +45,8 @@ if(!class_exists('MockUp')) {
 				'mockup_comment_message_label'     =>  __('Comments', 'MockUp'),
 				'mockup_comment_no_comments'       =>  __('Here you can add your comments on this MockUp.', 'MockUp'),
 				'mockup_approved_text'             =>  __('You approved this MockUp', 'MockUp'),
+
+				'mockup_locked_title'             =>  __('To view this protected MockUp, enter the password below:', 'MockUp'),
 
 				'mockup_default_background_color' 	=> '#ffffff',
 				'mockup_slidebox' 					=> 'light',
@@ -72,6 +74,9 @@ if(!class_exists('MockUp')) {
 				add_action('save_post', array($this, 'mockup_save'));
 				add_action('admin_enqueue_scripts', array($this, 'mockup_enqueue'));
 				add_action('wp_ajax_mockup_delete_comment', array($this, 'mockup_delete_comment'));
+				add_action('wp_ajax_mockup_delete_image', array($this, 'mockup_delete_image'));
+				add_action('wp_ajax_mockup_set_image', array($this, 'mockup_set_image'));
+				
 			}
 
 
@@ -83,7 +88,7 @@ if(!class_exists('MockUp')) {
 
 		public function mockup_posttype() {
 
-			if($this->settings['wp_version'] >= 3.8) $icon = 'dashicons-art';
+			if($this->settings['wp_version'] >= 38) $icon = 'dashicons-art';
 			else $icon = plugins_url('include/img/ico.png', __FILE__);
 
 			$pos = intval(get_option('mockup_menu_position'));
@@ -297,14 +302,25 @@ if(!class_exists('MockUp')) {
 
 			if($post_type == $this->posttype) {
 
+				$id 			= 'mockup_metabox_images';
+				$title 			=  __( 'Image', 'MockUp' );
+				$callback 		= array($this, 'mockup_metabox_images');
+				$post_type 		= $this->posttype;
+				$context 		= 'normal';
+				$priority 		= 'high';
+
+				add_meta_box($id, $title, $callback, $post_type, $context, $priority);
+
+
 				$id 			= 'mockup_metabox_content';
-				$title 			=  __( 'MockUp and Description', 'MockUp' );
+				$title 			=  __( 'Description', 'MockUp' );
 				$callback 		= array($this, 'mockup_metabox_content');
 				$post_type 		= $this->posttype;
 				$context 		= 'normal';
 				$priority 		= 'high';
 
 				add_meta_box($id, $title, $callback, $post_type, $context, $priority);
+
 
 				$id 			= 'mockup_metabox_comments';
 				$title 			=  __( 'Comments', 'MockUp' );
@@ -325,6 +341,7 @@ if(!class_exists('MockUp')) {
 
 				add_meta_box($id, $title, $callback, $post_type, $context, $priority);
 
+
 				$id 			= 'mockup_metabox_position';
 				$title 			=  __( 'MockUp Position', 'MockUp' );
 				$callback 		= array($this, 'mockup_metabox_position');
@@ -337,9 +354,15 @@ if(!class_exists('MockUp')) {
 		}
 
 
+		public function mockup_metabox_images($post) {
+
+			include_once 'core/view/metabox_images.php';
+		}
+
+
 		public function mockup_metabox_content($post) {
 
-			include_once 'core/view/metabox_mockups.php';
+			include_once 'core/view/metabox_content.php';
 		}
 
 
@@ -508,6 +531,17 @@ if(!class_exists('MockUp')) {
 			}
 		}
 
+		public function mockup_set_image() {
+
+			include_once 'core/controllers/image_set.php';
+			exit();
+		}
+
+		public function mockup_delete_image() {
+
+			include_once 'core/controllers/image_delete.php';
+			exit();
+		}
 
 		public function mockup_delete_comment() {
 

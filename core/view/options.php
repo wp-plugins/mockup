@@ -102,6 +102,16 @@
 
 
 			<tr>
+				<td><h3 style="border-bottom: 1px solid #ccc;"><?php _e('Password protected', 'MockUp'); ?></h3></td>
+			</tr>
+
+				<tr>
+					<td><span><?php _e('Password protected title', 'MockUp'); ?></span></td>
+					<td><textarea name="mockup_locked_title" style="width: 300px; height: 100px;"><?php echo get_option('mockup_locked_title'); ?></textarea></td>
+				</tr>
+
+
+			<tr>
 				<td><h3 style="border-bottom: 1px solid #ccc;"><?php _e('Settings', 'MockUp'); ?></h3></td>
 			</tr>			
 				
