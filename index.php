@@ -1,34 +1,52 @@
 <?php
 /*
-Plugin Name: MockUp
-Plugin URI: http://www.mockupplugin.com
-Description: MockUp helps you to present your designs professionally.
-Version: 1.3.0
-Author: Eelco Tjallema
-Author URI: http://www.estjallema.nl/en
-License: GPL2
-*/
+ * Plugin Name:       MockUp
+ * Plugin URI:        http://www.mockupplugin.com
+ * Description:       MockUp helps you to present your designs professionally.
+ * Version:           1.4.0
+ * Author:            Eelco Tjallema
+ * Author URI:        http://estjallema.nl?utm_medium=mockup
+ * License:           GPL2
+ */
+
+// If this file is called directly, abort.
+if(!defined('WPINC')) exit();
+
+
 if(!class_exists('MockUp')) {
+
+	define('MOCKUP_POSTTYPE',           'pt_mockup_plugin');
+	define('MOCKUP_TAXONOMY',           'relate_mockup');
+	define('MOCKUP_OPTIONSPAGE_SLUG',   'mockup_options');
+	define('MOCKUP_VERSION',            '1.4.0');
+	define('MOCKUP_UPGRADE_VERSION',    '1.3.0');
+	define('MOCKUP_WP_VERSION',         get_bloginfo('version'));
 
 	class MockUp {
 
-		// Vars
-		public $posttype = 'pt_mockup_plugin';
-
-		public $taxonomy = 'relate_mockup';
-
 		public function __construct() {
 
-			// Vars
-			$this->settings = array(
-				'dir' 				=> __DIR__,
-				'version'			=> '1.3.0',
-				'upgrade_version'	=> '0.0.7',
-				'wp_version'		=> str_replace('.', '', get_bloginfo('version')),
-				'option_group' 		=> 'mockup_options'
+			// Set the text domain
+			load_textdomain('MockUp', __DIR__.'/languages/MockUp-'.get_locale().'.mo');
+		}
+
+		public function mockup_options_settings_array() {
+
+			$options = array(
+				'mockup_default_background_color'   => '#ffffff',
+				'mockup_sidebar'                   => 'light',
+
+				'mockup_email'                      => get_option('admin_email'),
+				'mockup_email_settings'             => 'email_always',
+				'mockup_menu_position'              => 160
 			);
 
-			$this->options = array(
+			return $options;
+		}
+
+		public function mockup_options_text_array() {
+
+			$options = array(
 				'mockup_related_btn'               =>  __('Show related MockUps', 'MockUp'),
 				'mockup_description_btn'           =>  __('Show description', 'MockUp'),
 				'mockup_comment_btn'               =>  __('Write a comment', 'MockUp'),
@@ -47,83 +65,73 @@ if(!class_exists('MockUp')) {
 				'mockup_approved_text'             =>  __('You approved this MockUp', 'MockUp'),
 
 				'mockup_locked_title'             =>  __('To view this protected MockUp, enter the password below:', 'MockUp'),
-
-				'mockup_default_background_color' 	=> '#ffffff',
-				'mockup_slidebox' 					=> 'light',
-
-				'mockup_email' 						=> get_option('admin_email'),
-				'mockup_email_settings' 			=> 'email_always',
-				'mockup_menu_position' 				=> 160
 			);
 
-			// Set the text domain
-			load_textdomain('MockUp', __DIR__.'/languages/MockUp-'.get_locale().'.mo');
-
-			// Actions
-			add_action('init', array($this, 'mockup_posttype'), 1);
-			add_action('init', array($this, 'mockup_taxonomy'), 1);
-			add_action('admin_menu', array($this, 'mockup_optionspage'));
-			add_action('template_redirect', array($this, 'mockup_templates'), 1);
-			add_action('admin_init', array($this, 'mockup_register_settings'));
-			add_action('manage_'.$this->posttype.'_posts_custom_column', array($this, 'mockup_admincolumn_comments'), 1, 2);
-			add_action('manage_'.$this->posttype.'_posts_custom_column', array($this, 'mockup_admincolumn_status'), 1, 2);
-
-			if(is_admin()) {
-				add_action('restrict_manage_posts', array($this, 'mockup_taxonomy_filter'));
-				add_action('add_meta_boxes', array($this, 'mockup_metabox'));
-				add_action('save_post', array($this, 'mockup_save'));
-				add_action('admin_enqueue_scripts', array($this, 'mockup_enqueue'));
-				add_action('wp_ajax_mockup_delete_comment', array($this, 'mockup_delete_comment'));
-				add_action('wp_ajax_mockup_delete_image', array($this, 'mockup_delete_image'));
-				add_action('wp_ajax_mockup_set_image', array($this, 'mockup_set_image'));
-				
-			}
-
-
-			// Filters
-			add_filter('plugin_action_links_'.plugin_basename(__FILE__), array($this, 'mockup_pluginlink'));
-			add_filter('manage_'.$this->posttype.'_posts_columns', array($this, 'mockup_admincolumn_comments_title'));
-			add_filter('manage_'.$this->posttype.'_posts_columns', array($this, 'mockup_admincolumn_status_title'));
+			return $options;
 		}
 
-		public function mockup_posttype() {
 
-			if($this->settings['wp_version'] >= 38) $icon = 'dashicons-art';
-			else $icon = plugins_url('include/img/ico.png', __FILE__);
+		public function mockup_options_style_array() {
+
+			$options = array(
+				'mockup_color_active'	 => '#21759b',
+				'mockup_importfont'		 => '',
+				'mockup_fontfamily'		 => "'Helvetica Neue', Helvetica, Arial, sans-serif",
+				'mockup_style_general'   => ''
+			);
+
+			return $options;
+		}
+
+
+		public function mockup_options_advanced_array() {
+
+			$options = array(
+				'mockup_password_settings'   => 'default'
+			);
+
+			return $options;
+		}
+	}
+
+
+	class MockUpCore extends MockUp {
+
+		public function mockup_posttype() {
 
 			$pos = intval(get_option('mockup_menu_position'));
 			if(empty($pos)) $pos = 160;
 
 			$labels = array(
-				'name'	 				=> __('MockUp', 'MockUp'),
-				'all_items'	 			=> __('All MockUps', 'MockUp'),
-				'singular_name'	 		=> __('MockUp', 'MockUp'),
-				'add_new'	 			=> __('Add new MockUp', 'MockUp'),
-				'add_new_item'	 		=> __('Add New MockUp', 'MockUp'),
-				'edit'	 				=> __('Edit', 'MockUp'),
-				'edit_item'	 			=> __('Edit MockUp', 'MockUp'),
-				'new_item'	 			=> __('New MockUp', 'MockUp'),
-				'view'	 				=> __('View MockUp', 'MockUp'),
-				'view_item'				=> __('View MockUp', 'MockUp'),
-				'search_items'	 		=> __('Search MockUps', 'MockUp'),
-				'not_found'	 			=> __('No MockUps found', 'MockUp'),
-				'not_found_in_trash'	=> __('No MockUps found in Trash', 'MockUp'),
-				'parent'	 			=> __('Parent MockUp', 'MockUp')
+				'name'                  => __('MockUp', 'MockUp'),
+				'all_items'             => __('All MockUps', 'MockUp'),
+				'singular_name'         => __('MockUp', 'MockUp'),
+				'add_new'               => __('Add new MockUp', 'MockUp'),
+				'add_new_item'          => __('Add new MockUp', 'MockUp'),
+				'edit'                  => __('Edit', 'MockUp'),
+				'edit_item'             => __('Edit MockUp', 'MockUp'),
+				'new_item'              => __('New MockUp', 'MockUp'),
+				'view'                  => __('View MockUp', 'MockUp'),
+				'view_item'             => __('View MockUp', 'MockUp'),
+				'search_items'          => __('Search MockUps', 'MockUp'),
+				'not_found'             => __('No MockUps found', 'MockUp'),
+				'not_found_in_trash'    => __('No MockUps found in Trash', 'MockUp'),
+				'parent'                => __('Parent MockUp', 'MockUp')
 			);
 
 			$args = array(
-				'labels' 				=> $labels,
-				'public' 				=> true,
-				'exclude_from_search' 	=> true,
-				'show_ui' 				=> true,
-				'show_in_nav_menus' 	=> false,
-				'rewrite' 				=> array("slug" => __('mockup', 'MockUp')),
-				'supports' 				=> array('title', 'page-attributes'),//,'custom-fields'
-				'menu_position' 		=> $pos,
-				'menu_icon' 			=> $icon
+				'labels'                => $labels,
+				'public'                => true,
+				'exclude_from_search'   => true,
+				'show_ui'               => true,
+				'show_in_nav_menus'     => false,
+				'rewrite'               => array('slug' => 'mockup'),
+				'supports'              => array('title', 'page-attributes'),//,'custom-fields'
+				'menu_position'         => $pos,
+				'menu_icon'             => 'dashicons-art'
 			);
 
-			register_post_type($this->posttype, $args);
+			register_post_type(MOCKUP_POSTTYPE, $args);
 		}
 
 
@@ -144,98 +152,200 @@ if(!class_exists('MockUp')) {
 			);
 
 			$args = array(
-				'labels' 			=> $labels,
-				'rewrite'			=> array( 'slug' => 'related', 'with_front' => false),
+				'labels'            => $labels,
+				'rewrite'           => array( 'slug' => 'related', 'with_front' => false),
 				'show_admin_column' => true,
 				'hierarchical'      => true
 			);
 
-			register_taxonomy($this->taxonomy, $this->posttype, $args);
-		}
-
-
-		public function mockup_optionspage() {
-
-			$parentslug 	= 'edit.php?post_type='.$this->posttype;
-			$pagetitle 		= __('MockUp Options & Settings', 'MockUp');
-			$menutitle 		= __('Settings', 'MockUp');
-			$capability 	= 'manage_options';
-			$menuslug 		= 'mockup_options';
-			$function 		= array($this, 'mockup_optionspage_include');
-
-			add_submenu_page($parentslug, $pagetitle, $menutitle, $capability, $menuslug, $function);
-		}
-
-
-		public function mockup_pluginlink($links) {
-			$links[] = '<a href="'.get_admin_url(null, 'edit.php?post_type='.$this->posttype.'&page=mockup_options').'">'.__('Settings', 'MockUp').'</a>';
-			return $links;
-		}
-
-
-		public function mockup_optionspage_include() {
-
-			include_once 'core/view/options.php';
+			register_taxonomy(MOCKUP_TAXONOMY, MOCKUP_POSTTYPE, $args);
 		}
 
 
 		public function mockup_templates() {
 
-			if(is_singular($this->posttype)) {
+			if(is_singular(MOCKUP_POSTTYPE)) {
 
-				include('core/view/single.php');
+				include('view/single.php');
 				exit();
 			}
+		}
+
+		public function mockup_flushrules() { // Activation
+
+			$this->mockup_posttype();
+			$this->mockup_taxonomy();
+
+			flush_rewrite_rules();
+		}
+	}
+
+
+	class MockUpOptions extends MockUp {
+
+		public $group = 'mockup_option_group';
+
+		public function mockup_optionspage() {
+
+			$parentslug     = 'edit.php?post_type='.MOCKUP_POSTTYPE;
+			$pagetitle      = __('MockUp Options & Settings', 'MockUp');
+			$menutitle      = __('Settings', 'MockUp');
+			$capability     = 'manage_options';
+			$function       = array($this, 'mockup_optionspage_include');
+
+			add_submenu_page($parentslug, $pagetitle, $menutitle, $capability, MOCKUP_OPTIONSPAGE_SLUG, $function);
+		}
+
+
+		public function mockup_optionspage_include() {
+
+			include_once 'view/options.php';
+		}
+
+
+		public function mockup_pluginlink($links) {
+			$links[] = '<a href="'.get_admin_url(NULL, 'edit.php?post_type='.MOCKUP_POSTTYPE.'&page='.MOCKUP_OPTIONSPAGE_SLUG).'">'.__('Settings', 'MockUp').'</a>';
+			return $links;
 		}
 
 
 		public function mockup_register_settings() {
 
-			foreach($this->options as $name => $value) {
+			foreach ($this->mockup_options_settings_array() as $key => $value) {
 
-				$option_group = $this->settings['option_group'];
-				$option_name = $name;
+				$option_group = $this->group.'_settings';
 
-				register_setting($option_group, $option_name);
+				register_setting($option_group, $key);
 			}
+
+			foreach ($this->mockup_options_text_array() as $key => $value) {
+
+				$option_group = $this->group.'_text';
+
+				register_setting($option_group, $key);
+			}
+
+			foreach ($this->mockup_options_style_array() as $key => $value) {
+
+				$option_group = $this->group.'_style';
+
+				register_setting($option_group, $key);
+			}
+
+			foreach ($this->mockup_options_advanced_array() as $key => $value) {
+
+				$option_group = $this->group.'_advanced';
+
+				register_setting($option_group, $key);
+			}
+
 		}
+
+
+		public function mockup_add_options() { // Activation
+
+			foreach ($this->mockup_options_settings_array() as $key => $value) {
+
+				add_option($key, $value);
+				$uninstall[] = $key;
+			}
+
+			foreach ($this->mockup_options_text_array() as $key => $value) {
+
+				add_option($key, $value);
+				$uninstall[] = $key;
+			}
+
+			foreach ($this->mockup_options_style_array() as $key => $value) {
+
+				add_option($key, $value);
+				$uninstall[] = $key;
+			}
+
+			foreach ($this->mockup_options_advanced_array() as $key => $value) {
+
+				add_option($key, $value);
+				$uninstall[] = $key;
+			}
+
+			update_option('mockup_uninstall', $uninstall);
+		}
+	}
+
+
+	class MockUpBackend {
+
+		// Add the CSS and JS files
+		public function mockup_enqueue() {
+
+			wp_register_style( 'mockup_css', plugin_dir_url(__FILE__).'include/css/admin.min.css', array('wp-color-picker'), MOCKUP_VERSION);
+			wp_register_script('mockup_js', plugin_dir_url(__FILE__).'include/js/admin.min.js', array('wp-color-picker'), MOCKUP_VERSION);
+
+			$translation_array = array(
+				'popup_title' => __('Select or upload the MockUp', 'MockUp'),
+				'popup_button' => __('Add MockUp', 'MockUp'),
+				'confirm' => __('Are you sure?', 'MockUp'),
+			);
+
+			wp_localize_script('mockup_js', 'mockupL10n', $translation_array);
+
+			wp_enqueue_media();
+			wp_enqueue_style('mockup_css');
+			wp_enqueue_script('mockup_js');
+		}
+
 
 		// Taxonomy filter
 		public function mockup_taxonomy_filter() {
 
 			global $typenow, $post, $post_id;
 
-			if($typenow == $this->posttype) {
+			if(isset($_GET[MOCKUP_TAXONOMY])) $selected = $_GET[MOCKUP_TAXONOMY];
+			else $selected = false;
 
-				$taxonomies = get_object_taxonomies($this->posttype);
+			$args = array(
+				'orderby'           => 'name', 
+				'order'             => 'ASC',
+				'hide_empty'        => false,
+				'parent'            => 0,
+			); 
 
-				if($taxonomies) {
+			$terms = get_terms(MOCKUP_TAXONOMY, $args);
 
-					foreach ($taxonomies as $tax_slug) {
+			echo '<select name='.MOCKUP_TAXONOMY.' id='.MOCKUP_TAXONOMY.' class="postform">';
 
-						$tax_obj = get_taxonomy($tax_slug);
-						$tax_name = $tax_obj->labels->name;
-						$terms = get_terms($tax_slug);
+				echo '<option value="">'.__('Show all customers', 'MockUp').'</option>';
 
-						echo '<select name='.$tax_slug.' id='.$tax_slug.' class="postform">';
+				foreach($terms as $term) { 
 
-							echo '<option value="">'.sprintf(__('Show all %s', 'MockUp'), $tax_name).'</option>';
+					// Check if item is selected
+					if($selected && $selected == $term->slug) $select = ' selected="selected"';
+					else $select = '';
 
-							foreach($terms as $term) { 
+					// Show top level item.
+					echo '<option value="'.$term->slug.'"'.$select.'>'.$term->name.'</option>';
 
-								if(isset($_GET[$tax_slug]) && $_GET[$tax_slug] == $term->slug) {
-									$select = ' selected="selected"';
-								} else { 
-									$select = '';
-								}
+					// Get child pages.
+					$args = array(
+						'orderby'           => 'name', 
+						'order'             => 'ASC',
+						'hide_empty'        => true,
+						'child_of'          => $term->term_id
+					);
 
-								echo '<option value="'.$term->slug.'"'.$select.'>'.$term->name.' ('.$term->count.')</option>';
-							}
+					$childTerms = get_terms(MOCKUP_TAXONOMY, $args);
 
-						echo '</select>';
+					foreach($childTerms as $childTerm) {
+
+						// Check if item is selected
+						if($selected && $selected == $childTerm->slug) $select = ' selected="selected"';
+						else $select = '';
+
+						echo '<option value="'.$childTerm->slug.'"'.$select.'> - '.$childTerm->name.' ('.$childTerm->count.')</option>';
 					}
 				}
-			}
+
+			echo '</select>';
 		}
 
 
@@ -274,8 +384,8 @@ if(!class_exists('MockUp')) {
 
 			foreach($defaults as $key => $title) {
 
-				if($key == 'taxonomy-'.$this->taxonomy)
-					$status['mockup_status'] = 'Status';
+				if($key == 'taxonomy-'.MOCKUP_TAXONOMY)
+					$status['mockup_status'] = __('Status', 'MockUp');
 					$status[$key] = $title;
 			}
 
@@ -295,59 +405,110 @@ if(!class_exists('MockUp')) {
 				}
 			}
 		}
+	}
 
 
-		// Metaboxes
+	class MockUpAjaxBackend {
+
+		public function mockup_set_image() {
+
+			$nonce = filter_input(INPUT_POST, 'mockupnonce', FILTER_UNSAFE_RAW);
+			$postid = filter_input(INPUT_POST, 'postid', FILTER_SANITIZE_NUMBER_INT);
+			$mockup_id = filter_input(INPUT_POST, 'mockup_id', FILTER_SANITIZE_NUMBER_INT);
+
+			if(!empty($postid) && !empty($mockup_id) && !empty($nonce) && wp_verify_nonce($nonce, 'mockup_delete_image')) {
+
+				update_post_meta($postid, '_mockup_id_1', $mockup_id);
+				echo wp_get_attachment_image($mockup_id, array(150, 150), true);
+			}
+
+			exit();
+		}
+
+		public function mockup_delete_image() {
+
+			$nonce = filter_input(INPUT_POST, 'mockupnonce', FILTER_UNSAFE_RAW);
+			$postid = filter_input(INPUT_POST, 'postid', FILTER_SANITIZE_NUMBER_INT);
+			$mockup_id = filter_input(INPUT_POST, 'mockup_id', FILTER_SANITIZE_NUMBER_INT);
+
+
+			if(!empty($postid) && !empty($mockup_id) && !empty($nonce) && wp_verify_nonce($nonce, 'mockup_delete_image')) {
+
+				delete_post_meta($postid, '_mockup_id_1', $mockup_id);
+			}
+
+			exit();
+		}
+
+		public function mockup_delete_comment() {
+
+			$nonce = filter_input(INPUT_POST, 'mockupnonce', FILTER_UNSAFE_RAW);
+			$postid = filter_input(INPUT_POST, 'postid', FILTER_SANITIZE_NUMBER_INT);
+			$commentid = filter_input(INPUT_POST, 'commentid', FILTER_SANITIZE_NUMBER_INT);
+			$comments = get_post_meta($postid, '_mockup_comments_1', false);
+
+			if(!empty($postid) && !empty($nonce) && wp_verify_nonce($nonce, 'mockup_delete_comment')) {
+
+				delete_post_meta($postid, '_mockup_comments_1', $comments[$commentid]);
+			}
+
+			exit();
+		}
+	}
+
+
+	class MockUpMetaboxes {
+
 		public function mockup_metabox($post_type) {
 
-			if($post_type == $this->posttype) {
+			if($post_type == MOCKUP_POSTTYPE) {
 
-				$id 			= 'mockup_metabox_images';
-				$title 			=  __( 'Image', 'MockUp' );
-				$callback 		= array($this, 'mockup_metabox_images');
-				$post_type 		= $this->posttype;
-				$context 		= 'normal';
-				$priority 		= 'high';
-
-				add_meta_box($id, $title, $callback, $post_type, $context, $priority);
-
-
-				$id 			= 'mockup_metabox_content';
-				$title 			=  __( 'Description', 'MockUp' );
-				$callback 		= array($this, 'mockup_metabox_content');
-				$post_type 		= $this->posttype;
-				$context 		= 'normal';
-				$priority 		= 'high';
+				$id             = 'mockup_metabox_images';
+				$title          =  __( 'Image', 'MockUp' );
+				$callback       = array($this, 'mockup_metabox_images');
+				$post_type      = MOCKUP_POSTTYPE;
+				$context        = 'normal';
+				$priority       = 'high';
 
 				add_meta_box($id, $title, $callback, $post_type, $context, $priority);
 
 
-				$id 			= 'mockup_metabox_comments';
-				$title 			=  __( 'Comments', 'MockUp' );
-				$callback 		= array($this, 'mockup_metabox_comments');
-				$post_type 		= $this->posttype;
-				$context 		= 'normal';
-				$priority 		= 'core';
+				$id             = 'mockup_metabox_content';
+				$title          =  __( 'Description', 'MockUp' );
+				$callback       = array($this, 'mockup_metabox_content');
+				$post_type      = MOCKUP_POSTTYPE;
+				$context        = 'normal';
+				$priority       = 'high';
 
 				add_meta_box($id, $title, $callback, $post_type, $context, $priority);
 
 
-				$id 			= 'mockup_metabox_settings';
-				$title 			=  __( 'Information and Settings', 'MockUp' );
-				$callback 		= array($this, 'mockup_metabox_settings');
-				$post_type 		= $this->posttype;
-				$context 		= 'normal';
-				$priority 		= 'low';
+				$id             = 'mockup_metabox_comments';
+				$title          =  __( 'Comments', 'MockUp' );
+				$callback       = array($this, 'mockup_metabox_comments');
+				$post_type      = MOCKUP_POSTTYPE;
+				$context        = 'normal';
+				$priority       = 'core';
 
 				add_meta_box($id, $title, $callback, $post_type, $context, $priority);
 
 
-				$id 			= 'mockup_metabox_position';
-				$title 			=  __( 'MockUp Position', 'MockUp' );
-				$callback 		= array($this, 'mockup_metabox_position');
-				$post_type 		= $this->posttype;
-				$context 		= 'side';
-				$priority 		= 'low';
+				$id             = 'mockup_metabox_settings';
+				$title          =  __( 'Information and Settings', 'MockUp' );
+				$callback       = array($this, 'mockup_metabox_settings');
+				$post_type      = MOCKUP_POSTTYPE;
+				$context        = 'normal';
+				$priority       = 'low';
+
+				add_meta_box($id, $title, $callback, $post_type, $context, $priority);
+
+
+				$id             = 'mockup_metabox_position';
+				$title          =  __( 'MockUp Position', 'MockUp' );
+				$callback       = array($this, 'mockup_metabox_position');
+				$post_type      = MOCKUP_POSTTYPE;
+				$context        = 'side';
+				$priority       = 'low';
 
 				add_meta_box($id, $title, $callback, $post_type, $context, $priority);
 			}
@@ -356,31 +517,31 @@ if(!class_exists('MockUp')) {
 
 		public function mockup_metabox_images($post) {
 
-			include_once 'core/view/metabox_images.php';
+			include_once 'view/metabox_images.php';
 		}
 
 
 		public function mockup_metabox_content($post) {
 
-			include_once 'core/view/metabox_content.php';
+			include_once 'view/metabox_content.php';
 		}
 
 
 		public function mockup_metabox_comments($post) {
 
-			include_once 'core/view/metabox_comments.php';
+			include_once 'view/metabox_comments.php';
 		}
 
 
 		public function mockup_metabox_settings($post) {
 
-			include_once 'core/view/metabox_settings.php';
+			include_once 'view/metabox_settings.php';
 		}
 
 
 		public function mockup_metabox_position($post) {
 
-			include_once 'core/view/metabox_positions.php';
+			include_once 'view/metabox_positions.php';
 		}
 
 
@@ -390,8 +551,8 @@ if(!class_exists('MockUp')) {
 			if(!isset($_POST['mockup_metabox_settings_nonce']))
 				return $post_id;
 
-			$nonce = $_POST['mockup_metabox_settings_nonce'];
 
+			$nonce = $_POST['mockup_metabox_settings_nonce'];
 
 			if(!wp_verify_nonce($nonce, 'mockup_metabox_settings'))
 				return $post_id;
@@ -401,28 +562,19 @@ if(!class_exists('MockUp')) {
 				return $post_id;
 
 
-			if('page' == $_POST['post_type']) {
-
-
-			if(!current_user_can('edit_page', $post_id))
+			if($_POST['post_type'] == MOCKUP_POSTTYPE && !current_user_can('edit_page', $post_id))
 				return $post_id;
-
-			} else {
-
-			if(!current_user_can('edit_post', $post_id))
-				return $post_id;
-			}
 
 
 			// Sanitize user input.
-			$mockup_id 					= sanitize_text_field($_POST['mockup_id']);
-			$mockup_description 		= $_POST['mockup_description'];
-			$mockup_background_color 	= sanitize_text_field($_POST['mockup_background_color_1']);
-			$mockup_comment_settings 	= sanitize_text_field($_POST['mockup_comment_settings_1']);
-			$mockup_slidebox 			= sanitize_text_field($_POST['mockup_slidebox_1']);
-			$mockup_email_settings 		= sanitize_text_field($_POST['mockup_email_settings_1']);
-			$mockup_email 		 		= sanitize_email($_POST['mockup_email_1']);
-			$mockup_position 			= sanitize_text_field($_POST['mockup_position']);
+			$mockup_id                  = sanitize_text_field($_POST['mockup_id']);
+			$mockup_description         = $_POST['mockup_description'];
+			$mockup_background_color    = sanitize_text_field($_POST['mockup_background_color_1']);
+			$mockup_comment_settings    = sanitize_text_field($_POST['mockup_comment_settings_1']);
+			$mockup_sidebar            = sanitize_text_field($_POST['mockup_sidebar_1']);
+			$mockup_email_settings      = sanitize_text_field($_POST['mockup_email_settings_1']);
+			$mockup_email               = sanitize_email($_POST['mockup_email_1']);
+			$mockup_position            = sanitize_text_field($_POST['mockup_position']);
 			
 
 			// Update the meta field in the database.
@@ -430,7 +582,7 @@ if(!class_exists('MockUp')) {
 			update_post_meta($post_id, '_mockup_description_1', $mockup_description);
 			update_post_meta($post_id, '_mockup_background_color_1', $mockup_background_color);
 			update_post_meta($post_id, '_mockup_comment_settings_1', $mockup_comment_settings);
-			update_post_meta($post_id, '_mockup_slidebox_1', $mockup_slidebox);
+			update_post_meta($post_id, '_mockup_sidebar_1', $mockup_sidebar);
 			update_post_meta($post_id, '_mockup_email_settings_1', $mockup_email_settings);
 			update_post_meta($post_id, '_mockup_email_1', $mockup_email);
 			update_post_meta($post_id, '_mockup_position_1', $mockup_position);
@@ -440,69 +592,227 @@ if(!class_exists('MockUp')) {
 				delete_post_meta($post_id, '_mockup_status_1');
 			}
 		}
+	}
 
 
-		// Add the CSS and JS files
-		public function mockup_enqueue() {
+	class MockUpSingle {
 
-			wp_register_style( 'mockup_css', plugin_dir_url(__FILE__).'include/css/admin.css', array('wp-color-picker'), $this->settings['version']);
-			wp_register_script('mockup_js', plugin_dir_url(__FILE__).'include/js/admin.min.js', array('wp-color-picker') , $this->settings['version']);
+		public function __construct() {
 
-			$translation_array = array(
-				'popup_title' => __('Select or upload the MockUp', 'MockUp'),
-				'popup_button' => __('Add MockUp', 'MockUp'),
-				'confirm' => __('Are you sure?', 'MockUp'),
-			);
+			// Setup vars
+			$this->postID = get_the_ID();
+			$this->mockupID = get_post_meta($this->postID, '_mockup_id_1', true);
+			$this->description = get_post_meta($this->postID, '_mockup_description_1', true);
+			$this->comments = get_post_meta($this->postID, '_mockup_comment_settings_1', true);
+			$this->terms = get_the_terms($this->postID, MOCKUP_TAXONOMY);
 
-			wp_localize_script('mockup_js', 'mockupL10n', $translation_array);
+			// Load functions
+			$this->mockup_single_check();
+			$this->mockup_single_layout();
+		}
 
-			wp_enqueue_media();
-			wp_enqueue_style('mockup_css');
-			wp_enqueue_script('mockup_js');
+		public function mockup_single_check() {
+
+			if(empty($this->mockupID) && is_user_logged_in()) {
+
+				$title = __('No Mockup found' ,'MockUp');
+				$message = __('You did not add a MockUp.' ,'MockUp');
+
+				wp_die($message, $title);
+
+			} elseif(empty($this->mockupID) && !is_user_logged_in()) {
+
+				wp_redirect(get_bloginfo('url'));
+			}
 		}
 
 
+		public function mockup_single_layout() {
+
+			// Get image data.
+			$image_data = wp_get_attachment_image_src($this->mockupID, 'full');
+
+			$this->url = $image_data[0];
+			$this->width = $image_data[1];
+			$this->height = $image_data[2];
 
 
-		// View
+			// Double check. Some people have problems with this.
+			if(empty($this->width) && !empty($this->url) && function_exists('getimagesize')) {
+
+				$image_data = getimagesize($this->url);
+				$this->width = $image_data[0];
+			}
+
+			if(empty($this->height) && !empty($this->url) && function_exists('getimagesize')) {
+
+				$image_data = getimagesize($this->url);
+				$this->height = $image_data[1];
+			}
+
+
+			// Get image position.
+			$this->position = get_post_meta($this->postID, '_mockup_position_1', true);
+
+			// Set colors.
+			$this->bgcolor = get_post_meta($this->postID, '_mockup_background_color_1', true);
+			$this->menucolor = get_post_meta($this->postID, '_mockup_sidebar_1', true);
+			$this->activecolor = get_option('mockup_color_active');
+			if(!empty($this->menucolor)) $this->bodyclass = $this->menucolor; 
+			else $this->bodyclass = 'light';
+
+			// Sizes
+			$this->sidebarsize = '300';
+
+			// Font
+			$this->fontfamily = get_option('mockup_fontfamily');
+		}
+
+
+		public function mockup_terms($password) {
+
+			if($this->terms && !is_wp_error($this->terms)) {
+
+				$term_id_array = array();
+
+				foreach($this->terms as $term) {
+
+					$term_id_array[] = $term->term_id;
+				}
+
+				$args = array(
+					'post_type'         => MOCKUP_POSTTYPE,
+					'orderby'           => 'menu_order',
+					'order'             => 'ASC',
+					'has_password'      => $password, // true, false or null
+					'posts_per_page'    => -1,
+					'tax_query'         => array(
+						array(
+							'taxonomy'  => MOCKUP_TAXONOMY,
+							'terms'     => $term_id_array
+						)
+					)
+				);
+
+				return $query = new WP_Query($args);
+			}
+
+			return false;
+		}
+
+
+		public function mockup_single_menu() {
+			
+			$menu = null;
+			$terms = $this->mockup_terms(null);
+
+			// Description
+			if(!empty($this->description))
+				$menu .= '<a href="#" title="'.get_option('mockup_description_btn').'" id="description" class="toggle show-title"><span class="dashicons dashicons-welcome-write-blog"></span></a>';
+
+			// Comments
+			if($this->comments == 'enable')
+				$menu .= '<a href="#" title="'.get_option('mockup_comment_btn').'" id="comment" class="toggle show-title"><span class="dashicons dashicons-format-chat"></span></a>';
+
+			// Related
+			if(isset($terms->found_posts) && $terms->found_posts > 1)
+				$menu .= '<a href="#" title="'.get_option('mockup_related_btn').'" id="related" class="toggle show-title"><span class="dashicons dashicons-editor-ul"></span></a>';
+
+			// Approve
+			$menu .= '<a href="#" title="'.get_option('mockup_approve_btn').'" id="approve" class="toggle show-title"><span class="dashicons dashicons-yes"></span></a>';
+
+			return $menu; 
+		}
+
+
+		public function mockup_check_password() {
+
+			// Check mockup.
+			if(post_password_required()) return true;
+
+			// Check related mockups
+			$password_settings = get_option('mockup_password_settings');
+
+			if($password_settings == 'inherit') {
+
+				$query = $this->mockup_terms(true);
+
+				if(empty($query)) return false;
+
+				while($query->have_posts()): $query->the_post();
+
+					if(post_password_required()) {
+						wp_reset_postdata();
+						return true;
+					} 
+
+				endwhile;
+
+				wp_reset_postdata();
+			}
+
+			return false;
+		}
+
+
+		public function mockup_password_form() {
+
+			global $post;
+
+			$label = 'pwbox-'.(empty($post->ID ) ? rand() : $post->ID);
+
+			$form = '<form class="password" action="'.esc_url(site_url('wp-login.php?action=postpass', 'login_post')).'" method="post">';
+			$form .= '<span class="dashicons dashicons-lock"></span>';
+			$form .= '<p>'.get_option('mockup_locked_title').'</p>';
+			$form .= '<input class="field" name="post_password" id="'.$label.'" type="password" size="20" maxlength="20" /><br />';
+			$form .= '<input type="submit" class="btn" name="Submit" value="'.get_option('mockup_send_btn').'" />';
+			$form .= '</form>';
+
+			return $form;
+		}
+	}
+
+
+	class MockUpAjaxSingle {
+
 		public function mockup_single_description() {
 
-			include_once 'core/view/slidebox_description.php';
+			$id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+
+			if(!empty($id)) {
+
+				echo '<h1>'.get_option('mockup_description_title').'</h1>';
+				echo '{split}';
+				echo '<p>'.nl2br(get_post_meta($id, '_mockup_description_1', true)).'</p>';
+			}
+
 			exit();
 		}
 
 
 		public function mockup_single_comment() {
 
-			include_once 'core/view/slidebox_comment.php';
-			exit();
-		}
+			$id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+			
 
+			// Form
+			echo '<h1>'.get_option('mockup_comment_title').'</h1>';
+			echo '{split}';
 
-		public function mockup_single_related() {
+			echo '<form role="form">';
 
-			include_once 'core/view/slidebox_related.php';
-			exit();
-		}
+			 	wp_nonce_field('mockup_process_comment', 'mockupnonce');
 
+				echo '<input type="text" id="comment_name" class="field not-empty" placeholder="'.get_option('mockup_comment_name_label').'">';
+				echo '<textarea id="comment_text" class="field not-empty" rows="3" placeholder="'.get_option('mockup_comment_message_label').'"></textarea>';
 
-		public function mockup_single_approve() {
+				echo '<button type="submit" id="comment_submit" class="submit btn">'.get_option('mockup_send_btn').'</button>';
 
-			include_once 'core/view/slidebox_approve.php';
-			exit();
-		}
+			echo '</form>';
+				
 
-
-
-		// Controllers
-		public function mockup_process_comment() {
-
-			include_once 'core/controllers/comment.php';
-			exit();
-		}
-
-
-		public function mockup_show_comment($comments) {
+			// Comments
+			$comments = get_post_meta($id, '_mockup_comments_1', false);
 
 			if(!empty($comments)) {
 
@@ -514,13 +824,13 @@ if(!class_exists('MockUp')) {
 
 					echo '<div class="comment">';
 
-						echo '<p><span class="time">'.human_time_diff($comment['time']).' '.__('ago','MockUp').'</span><br />';
-						echo '<strong>'.$comment['name'].' '.__('wrote', 'MockUp').': </strong>';
+						echo '<p><strong>'.$comment['name'].'</strong> ('.human_time_diff($comment['time']).' '.__('ago', 'MockUp').'):<br />';
 						echo nl2br($comment['text']).'</p>';
 
 					echo '</div>';
 
 				}
+
 			} else {
 
 				echo '<div class="comment">';
@@ -529,134 +839,269 @@ if(!class_exists('MockUp')) {
 
 				echo '</div>';
 			}
-		}
 
-		public function mockup_set_image() {
-
-			include_once 'core/controllers/image_set.php';
 			exit();
 		}
 
-		public function mockup_delete_image() {
 
-			include_once 'core/controllers/image_delete.php';
+		public function mockup_process_comment() {
+
+			$id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+			$nonce = filter_input(INPUT_POST, 'mockupnonce', FILTER_UNSAFE_RAW);
+			$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+			$text = filter_input(INPUT_POST, 'text', FILTER_SANITIZE_MAGIC_QUOTES);
+
+			if(!empty($id) && !empty($nonce) && wp_verify_nonce($nonce, 'mockup_process_comment')) {
+
+				// Add comment
+				$comment = array('name' => $name, 'text' => $text, 'time' => time());
+
+				add_post_meta($id, '_mockup_comments_1', $comment);
+
+
+				// Email
+				$email_settings = get_post_meta($id, '_mockup_email_settings_1', true );
+
+				if($email_settings == 'email_always' || $email_settings == 'email_comments') {
+
+					$to = get_post_meta($id, '_mockup_email_1', true);
+					if(empty($to)) $to = get_option('mockup_email');
+
+					$subject = sprintf(__('%s made comments on MockUp %s', 'MockUp'), $name, get_the_title($id));
+					$message = $text;
+					$message .= "\n\n";
+					$message .= sprintf(__('Link: %s', 'MockUp'), get_permalink($id));
+
+					wp_mail($to, $subject, $message);
+				}
+
+				// The output
+				$this->mockup_single_comment();
+			}
+
 			exit();
 		}
 
-		public function mockup_delete_comment() {
 
-			include_once 'core/controllers/comment_delete.php';
+		public function mockup_single_approve() {
+
+			$id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+			$status = get_post_meta($id, '_mockup_status_1', true);
+
+			echo '<h1>'.get_option('mockup_approve_title').'</h1>';
+			echo '{split}';
+
+			if(isset($status['approved']) && $status['approved'] == true) {
+
+				echo '<p>'.get_option('mockup_approved_text').'</p>';
+				exit();
+			}
+
+			echo '<p>'.nl2br(get_option('mockup_approve_text')).'</p>';
+
+			echo '<form role="form">';
+
+			 	wp_nonce_field('mockup_process_approve', 'mockupnonce');
+
+				echo '<input type="text" id="approve_name" class="field not-empty" placeholder="'.get_option('mockup_comment_name_label').'">';
+
+				echo '<button type="submit" id="approve_submit" class="submit btn">'.get_option('mockup_approve_btn').'</button>';
+
+			echo '</form>';
+
 			exit();
 		}
 
 
 		public function mockup_process_approve() {
 
-			include_once 'core/controllers/approve.php';
+			$id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+			$nonce = filter_input(INPUT_POST, 'mockupnonce', FILTER_UNSAFE_RAW);
+			$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+
+			if(!empty($id) && !empty($nonce) && wp_verify_nonce($nonce, 'mockup_process_approve')) {
+
+				$status = array('approved' => true, 'approved_name' => $name, 'approved_time' => time());
+
+				update_post_meta($id, '_mockup_status_1', $status);
+
+				// Email
+				$email = get_post_meta($id, '_mockup_email_settings_1', true);
+
+				if($email == 'email_always' || $email == 'email_approved') {
+
+					$to = get_post_meta($id, '_mockup_email_1', true);
+					if(empty($to)) $to = get_option('mockup_email');
+
+					$subject = sprintf(__('Mockup %s is approved', 'MockUp'), get_the_title($id));
+					$message = sprintf(__('Your MockUp %s has been approved by %s', 'MockUp'), get_the_title($id), $name);
+					$message .= "\n\n";
+					$message .= sprintf(__('Link: %s', 'MockUp'), get_permalink($id));
+
+					wp_mail($to, $subject, $message);
+				}
+
+				echo '<h1>'.get_option('mockup_approve_title').'</h1>';
+				echo '{split}';
+				echo '<p>'.get_option('mockup_approved_text').'</p>';
+			}
+
 			exit();
 		}
 
 
-		// Save the option names for use in the uninstall.php
-		public function mockup_save_options() {
+		public function mockup_single_related() {
 
-			foreach($this->options as $name => $value) {
-				$array[] = $name;
-			}
-
-			add_option('mockup_uninstall', $array);
-		}
+		 	$id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+			$terms = get_the_terms($id, MOCKUP_TAXONOMY);
 
 
-		public function mockup_add_options() {
+			if($terms && !is_wp_error($terms)) {
 
-			foreach($this->options as $name => $value) {
-				add_option($name, $value);
-			}
-		}
+				echo '<h1>'.get_option('mockup_related_title').'</h1>';
+				echo '{split}';
 
+				$term_id_array = array();
 
-		public function mockup_flushrules() {
+				foreach($terms as $term) {
 
-			$this->mockup_posttype();
-			$this->mockup_taxonomy();
-
-			flush_rewrite_rules();
-		}
-
-
-		public function mockup_upgrade() {
-
-			include_once 'core/controllers/upgrades.php';
-
-			$upgrade = get_option('mockup_upgrade');
-
-			if($upgrade == false || $upgrade < $this->settings['version']) {
-
-				$args = array(
-					'post_type' => 'pt_mockup_plugin',
-					'posts_per_page' => -1
-				);
-
-				$the_query = new WP_Query($args);
-
-				if($the_query->have_posts()) {
-
-					while($the_query->have_posts()) {
-
-						$the_query->the_post();
-						$id = get_the_ID();
-
-						// Start update
-						if(!get_post_meta($id, 'mockup_update')) {
-							mockup_update_107($id);
-						}
-
-						mockup_update_111($id);
-					}
+					$term_id_array[] = $term->term_id;
 				}
 
-				wp_reset_postdata();
+				$args = array(
+					'post_type'         => MOCKUP_POSTTYPE,
+					'orderby'           => 'menu_order',
+					'order'             => 'ASC',
+					'posts_per_page'    => -1,
+					'tax_query'         => array(
+						array(
+							'taxonomy'  => MOCKUP_TAXONOMY,
+							'terms'     => $term_id_array
+						)
+					)
+				);
+
+				$query = new WP_Query($args);
+
+				echo '<ul>';
+
+				while($query->have_posts()) {
+					$query->the_post();
+
+					$tmp_id = get_the_ID();
+					$mockup = get_post_meta($tmp_id, '_mockup_id_1', true);
+					$status = get_post_meta($tmp_id, '_mockup_status_1', true);
+
+					if(empty($mockup)) continue;
+
+					if($tmp_id == $id && !empty($status['approved']) && $status['approved'] == true) {
+						// Current and approved.
+						echo '<li>'.get_the_title().'</li>';
+
+					} elseif($tmp_id == $id && empty($status['approved'])) {
+						// Current and not approved
+						echo '<li>'.get_the_title().'</li>';
+
+					} elseif($tmp_id != $id && !empty($status['approved']) && $status['approved'] == true) {
+						// Approved
+						echo '<li><a href="'.get_permalink().'">'.get_the_title().'</a></li>';
+
+					} else {
+
+						echo '<li><a href="'.get_permalink().'">'.get_the_title().'</a></li>';
+					}
+
+					echo '</ul>';
+				}
 			}
 
-			update_option('mockup_upgrade', $this->settings['version']);
+			exit();
 		}
 	}
 
+	// On activation
+	function MockUpActivation() {
 
-	$mockup = new MockUp;
+		$options = new MockUpOptions();
+		$options->mockup_add_options();
 
+		$core = new MockUpCore();
+		$core->mockup_flushrules();
 
-	if(is_admin()) {
-
-		add_action('wp_ajax_mockup_single_description', array($mockup, 'mockup_single_description'));
-		add_action('wp_ajax_nopriv_mockup_single_description', array($mockup, 'mockup_single_description'));
-
-
-		add_action('wp_ajax_mockup_single_comment', array($mockup, 'mockup_single_comment'));
-		add_action('wp_ajax_nopriv_mockup_single_comment', array($mockup, 'mockup_single_comment'));
-
-
-		add_action('wp_ajax_mockup_single_related', array($mockup, 'mockup_single_related'));
-		add_action('wp_ajax_nopriv_mockup_single_related', array($mockup, 'mockup_single_related'));
-
-
-		add_action('wp_ajax_mockup_single_approve', array($mockup, 'mockup_single_approve'));
-		add_action('wp_ajax_nopriv_mockup_single_approve', array($mockup, 'mockup_single_approve'));
-
-
-		add_action('wp_ajax_mockup_process_comment', array($mockup, 'mockup_process_comment'));
-		add_action('wp_ajax_nopriv_mockup_process_comment', array($mockup, 'mockup_process_comment'));
-
-
-		add_action('wp_ajax_mockup_process_approve', array($mockup, 'mockup_process_approve'));
-		add_action('wp_ajax_nopriv_mockup_process_approve', array($mockup, 'mockup_process_approve'));
+		// It is not possible any more to to upgrade from version 1.1.1 and below to this one.
+		update_option('mockup_upgrade', MOCKUP_VERSION);
 	}
 
 
-	register_activation_hook(__FILE__, array($mockup, 'mockup_save_options'));
-	register_activation_hook(__FILE__, array($mockup, 'mockup_add_options'));
-	register_activation_hook(__FILE__, array($mockup, 'mockup_upgrade'));
-	register_activation_hook(__FILE__, array($mockup, 'mockup_flushrules'));
+	// Putting it all together
+	function runMockUp() {
 
-} // class_exists
+		$MockUpCore = new MockUpCore();
+		add_action('init', array($MockUpCore, 'mockup_posttype'), 1);
+		add_action('init', array($MockUpCore, 'mockup_taxonomy'), 1);
+		add_action('template_redirect', array($MockUpCore, 'mockup_templates'), 1);
+
+
+		// Ajax
+		$ajaxSingle = new MockUpAjaxSingle();
+		add_action('wp_ajax_mockup_single_description', array($ajaxSingle, 'mockup_single_description'));
+		add_action('wp_ajax_nopriv_mockup_single_description', array($ajaxSingle, 'mockup_single_description'));
+
+		add_action('wp_ajax_mockup_single_comment', array($ajaxSingle, 'mockup_single_comment'));
+		add_action('wp_ajax_nopriv_mockup_single_comment', array($ajaxSingle, 'mockup_single_comment'));
+
+
+		add_action('wp_ajax_mockup_single_related', array($ajaxSingle, 'mockup_single_related'));
+		add_action('wp_ajax_nopriv_mockup_single_related', array($ajaxSingle, 'mockup_single_related'));
+
+
+		add_action('wp_ajax_mockup_single_approve', array($ajaxSingle, 'mockup_single_approve'));
+		add_action('wp_ajax_nopriv_mockup_single_approve', array($ajaxSingle, 'mockup_single_approve'));
+
+
+		add_action('wp_ajax_mockup_process_comment', array($ajaxSingle, 'mockup_process_comment'));
+		add_action('wp_ajax_nopriv_mockup_process_comment', array($ajaxSingle, 'mockup_process_comment'));
+
+
+		add_action('wp_ajax_mockup_process_approve', array($ajaxSingle, 'mockup_process_approve'));
+		add_action('wp_ajax_nopriv_mockup_process_approve', array($ajaxSingle, 'mockup_process_approve'));
+
+
+		// Only in admin
+		if(is_admin()) {
+
+			// Options page
+			$optionsPage = new MockUpOptions();
+			add_action('admin_menu', array($optionsPage, 'mockup_optionspage'));
+			add_action('admin_init', array($optionsPage, 'mockup_register_settings'));
+
+			add_filter('plugin_action_links_'.plugin_basename(__FILE__), array($optionsPage, 'mockup_pluginlink'));
+
+
+			// Metaboxes
+			$metaboxes = new MockUpMetaboxes();
+			add_action('add_meta_boxes', array($metaboxes, 'mockup_metabox'));
+			add_action('save_post', array($metaboxes, 'mockup_save'));
+
+
+			// Backend build.
+			$backend = new MockUpBackend();
+			add_action('admin_enqueue_scripts', array($backend, 'mockup_enqueue'));
+			add_action('restrict_manage_posts', array($backend, 'mockup_taxonomy_filter'));
+			add_action('manage_'.MOCKUP_POSTTYPE.'_posts_custom_column', array($backend, 'mockup_admincolumn_comments'), 1, 2);
+			add_action('manage_'.MOCKUP_POSTTYPE.'_posts_custom_column', array($backend, 'mockup_admincolumn_status'), 1, 2);
+
+			add_filter('manage_'.MOCKUP_POSTTYPE.'_posts_columns', array($backend, 'mockup_admincolumn_comments_title'));
+			add_filter('manage_'.MOCKUP_POSTTYPE.'_posts_columns', array($backend, 'mockup_admincolumn_status_title'));
+
+
+			// Ajax
+			$ajaxBackend = new MockUpAjaxBackend();
+			add_action('wp_ajax_mockup_delete_image', array($ajaxBackend, 'mockup_delete_image'));
+			add_action('wp_ajax_mockup_set_image', array($ajaxBackend, 'mockup_set_image'));
+		}
+	}
+
+	register_activation_hook(__FILE__, 'MockUpActivation');
+	runMockUp();
+}

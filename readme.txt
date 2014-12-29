@@ -1,11 +1,12 @@
 === MockUp ===
 Contributors: Eelco Tjallema
-Tags: mockup, design, presentation, website, screenshot, webdesign, wireframe, logo, showcase, portfolio
-Requires at least: 3.5.0
-Tested up to: 3.9
-Stable tag: 1.3.0
+Tags: mockup, design, presentation, website, screenshot, webdesign, wireframe, logo, showcase, portfolio, PSD
+Requires at least: 3.8
+Tested up to: 4.1
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
 
 The professional way to present your designs!
 
@@ -16,7 +17,7 @@ The professional way to present your designs!
 
 Normally you can never be sure if your client is viewing your designs properly. __Now you can take control over the presentation.__ With this plugin it's surprisingly easy to present your web designs the right way.
 
-With the Mockup plugin your customers will have the possibility to:
+With the Mockup plugin __your customers__ can:
 
 *   Approve the design.
 *   Add feedback to your design.
@@ -78,6 +79,17 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 == Changelog ==
 
+= 1.4.0 =
+* Bulk password protection.
+* Add custom CSS.
+* Change font (also import).
+* New design sidebar.
+* Better customer filter.
+* Use dashicons instead of fontawesome.
+* Better settings menu.
+* Drop support for 3.7 and lower.
+
+
 = 1.3.0 =
 * Better metaboxes.
 * Password protection.
@@ -90,7 +102,7 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 = 1.2.0 =
 * Ready for WordPress 3.9+
-* The frontend is improved with a better slidebox and Ajax.
+* The frontend is improved with a better sidebar and Ajax.
 * No longer use of Featuerd Images.
 * It is now possible to delete comments.
 * Choose the position of you MockUp.
@@ -153,6 +165,10 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Only update from version 1.3.0!
+
 
 = 1.3.0 =
 Some cool improvements.

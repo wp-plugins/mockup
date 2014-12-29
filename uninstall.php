@@ -1,10 +1,6 @@
 <?php
 
-if(!defined('WP_UNINSTALL_PLUGIN')) {
-
-	exit();
-
-} else {
+if(defined('WP_UNINSTALL_PLUGIN')) {
 
 	$options = get_option('mockup_uninstall');
 
