@@ -3,7 +3,7 @@ Contributors: Eelco Tjallema
 Tags: mockup, design, presentation, website, screenshot, webdesign, wireframe, logo, showcase, portfolio, PSD
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,11 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 
 == Changelog ==
+
+= 1.4.1 =
+* Bug fix.
+* Security upgrade.
+
 
 = 1.4.0 =
 * Bulk password protection.
@@ -165,6 +170,10 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 
 == Upgrade Notice ==
+
+= 1.4.1 =
+Important security update.
+
 
 = 1.4.0 =
 Only update from version 1.3.0!
