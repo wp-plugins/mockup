@@ -3,7 +3,7 @@
  * Plugin Name:       MockUp
  * Plugin URI:        http://www.mockupplugin.com
  * Description:       MockUp helps you to present your designs professionally.
- * Version:           1.4.0
+ * Version:           1.4.1
  * Author:            Eelco Tjallema
  * Author URI:        http://estjallema.nl?utm_medium=mockup
  * License:           GPL2
@@ -18,7 +18,7 @@ if(!class_exists('MockUp')) {
 	define('MOCKUP_POSTTYPE',           'pt_mockup_plugin');
 	define('MOCKUP_TAXONOMY',           'relate_mockup');
 	define('MOCKUP_OPTIONSPAGE_SLUG',   'mockup_options');
-	define('MOCKUP_VERSION',            '1.4.0');
+	define('MOCKUP_VERSION',            '1.4.1');
 	define('MOCKUP_UPGRADE_VERSION',    '1.3.0');
 	define('MOCKUP_WP_VERSION',         get_bloginfo('version'));
 
@@ -447,6 +447,7 @@ if(!class_exists('MockUp')) {
 			$commentid = filter_input(INPUT_POST, 'commentid', FILTER_SANITIZE_NUMBER_INT);
 			$comments = get_post_meta($postid, '_mockup_comments_1', false);
 
+
 			if(!empty($postid) && !empty($nonce) && wp_verify_nonce($nonce, 'mockup_delete_comment')) {
 
 				delete_post_meta($postid, '_mockup_comments_1', $comments[$commentid]);
@@ -566,12 +567,28 @@ if(!class_exists('MockUp')) {
 				return $post_id;
 
 
+			// Allowed HTML Tags in content.
+			$allowed_html = array(
+				'a' => array(
+					'href' => array(),
+					'title' => array(),
+					'target' => array()
+				),
+				'span' => array(
+					'style' => array()
+				),
+				'br' => array(),
+				'em' => array(),
+				'strong' => array(),
+			);
+
+
 			// Sanitize user input.
 			$mockup_id                  = sanitize_text_field($_POST['mockup_id']);
-			$mockup_description         = $_POST['mockup_description'];
+			$mockup_description         = wp_kses($_POST['mockup_description'], $allowed_html);
 			$mockup_background_color    = sanitize_text_field($_POST['mockup_background_color_1']);
 			$mockup_comment_settings    = sanitize_text_field($_POST['mockup_comment_settings_1']);
-			$mockup_sidebar            = sanitize_text_field($_POST['mockup_sidebar_1']);
+			$mockup_sidebar             = sanitize_text_field($_POST['mockup_sidebar_1']);
 			$mockup_email_settings      = sanitize_text_field($_POST['mockup_email_settings_1']);
 			$mockup_email               = sanitize_email($_POST['mockup_email_1']);
 			$mockup_position            = sanitize_text_field($_POST['mockup_position']);
@@ -801,7 +818,7 @@ if(!class_exists('MockUp')) {
 
 			echo '<form role="form">';
 
-			 	wp_nonce_field('mockup_process_comment', 'mockupnonce');
+				wp_nonce_field('mockup_process_comment', 'mockupnonce');
 
 				echo '<input type="text" id="comment_name" class="field not-empty" placeholder="'.get_option('mockup_comment_name_label').'">';
 				echo '<textarea id="comment_text" class="field not-empty" rows="3" placeholder="'.get_option('mockup_comment_message_label').'"></textarea>';
@@ -846,10 +863,17 @@ if(!class_exists('MockUp')) {
 
 		public function mockup_process_comment() {
 
+			// Allowed HTML Tags in comment.
+			$allowed_html = array(
+				'br' => array(),
+				'em' => array(),
+				'strong' => array(),
+			);
+
 			$id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
 			$nonce = filter_input(INPUT_POST, 'mockupnonce', FILTER_UNSAFE_RAW);
 			$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-			$text = filter_input(INPUT_POST, 'text', FILTER_SANITIZE_MAGIC_QUOTES);
+			$text = wp_kses($_POST['text'], $allowed_html);
 
 			if(!empty($id) && !empty($nonce) && wp_verify_nonce($nonce, 'mockup_process_comment')) {
 
@@ -901,7 +925,7 @@ if(!class_exists('MockUp')) {
 
 			echo '<form role="form">';
 
-			 	wp_nonce_field('mockup_process_approve', 'mockupnonce');
+				wp_nonce_field('mockup_process_approve', 'mockupnonce');
 
 				echo '<input type="text" id="approve_name" class="field not-empty" placeholder="'.get_option('mockup_comment_name_label').'">';
 
@@ -952,7 +976,7 @@ if(!class_exists('MockUp')) {
 
 		public function mockup_single_related() {
 
-		 	$id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+			$id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
 			$terms = get_the_terms($id, MOCKUP_TAXONOMY);
 
 
@@ -1099,6 +1123,7 @@ if(!class_exists('MockUp')) {
 			$ajaxBackend = new MockUpAjaxBackend();
 			add_action('wp_ajax_mockup_delete_image', array($ajaxBackend, 'mockup_delete_image'));
 			add_action('wp_ajax_mockup_set_image', array($ajaxBackend, 'mockup_set_image'));
+			add_action('wp_ajax_mockup_delete_comment', array($ajaxBackend, 'mockup_delete_comment'));
 		}
 	}
 
