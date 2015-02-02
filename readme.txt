@@ -1,15 +1,14 @@
 === MockUp ===
 Contributors: Eelco Tjallema
-Tags: mockup, design, presentation, website, screenshot, webdesign, wireframe, logo, showcase, portfolio, PSD
+Tags: mockup, design, presentation, screenshot, webdesign, wireframe, logo, showcase, portfolio, psd, jpg, png, mockvault, redpen, symu
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 1.4.1
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
-The professional way to present your designs!
-
+Present your designs, professionally!
 
 
 
@@ -78,6 +77,14 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 
 == Changelog ==
+
+= 1.5.0 =
+* Background image option.
+* Better metaboxes.
+* Add MockUp to the 'at a glance' dashboard widget.
+* Use native jQuery file.
+* Nicer sidebar.
+
 
 = 1.4.1 =
 * Bug fix.
@@ -170,6 +177,10 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 
 == Upgrade Notice ==
+
+= 1.5.0 =
+Big layout change.
+
 
 = 1.4.1 =
 Important security update.

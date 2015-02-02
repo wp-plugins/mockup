@@ -1,12 +1,10 @@
 <table width="100%" cellspacing="0" cellpadding="0">
 
-	<tbody>
+	<tbody valign="top">
 
 		<?php $comments = get_post_meta($post->ID, '_mockup_comments_1', false);
 
 			if(!empty($comments)) {
-
-				wp_nonce_field('mockup_delete_comment', 'mockupnonce');
 
 				// Init
 				krsort($comments);
@@ -19,15 +17,15 @@
 					// Init
 					$total--;
 
-					echo '<tr valign="top">';
+					echo '<tr>';
 
-						echo '<td width="20%" >';
+						echo '<td width="20%">';
 
 							echo '<span><strong>'.$comment['name'].'</strong></span>';
 							echo '<br />';
 							echo '<span><i>'.human_time_diff($comment['time']).' '.__('ago','MockUp').'</i></span>';
 							echo '<br />';
-							echo '<a href="#" id="'.$total.'" postid="'.$post->ID.'" class="delete_comment">'.__('Delete').'</a>';
+							echo '<a href="#" id="'.$total.'" postid="'.$post->ID.'" class="delete_comment mockup_delete">'.__('Delete').'</a>';
 
 						echo '</td>';
 
@@ -43,7 +41,7 @@
 
 			} else {
 
-				echo '<tr valign="top">';
+				echo '<tr>';
 
 					echo '<td>';
 
