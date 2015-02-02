@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MockUp 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-02 13:08+0100\n"
+"POT-Creation-Date: 2015-02-02 14:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -207,36 +207,36 @@ msgstr ""
 msgid "Image's"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:670
+#: development/wp-content/plugins/mockup/index.php:671
 msgid "No Mockup found"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:671
+#: development/wp-content/plugins/mockup/index.php:672
 msgid "You did not add a MockUp."
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:886
+#: development/wp-content/plugins/mockup/index.php:887
 #: development/wp-content/plugins/mockup/view/metabox_comments.php:26
 msgid "ago"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:936
+#: development/wp-content/plugins/mockup/index.php:937
 #, php-format
 msgid "%s made comments on MockUp %s"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:939
-#: development/wp-content/plugins/mockup/index.php:1004
+#: development/wp-content/plugins/mockup/index.php:940
+#: development/wp-content/plugins/mockup/index.php:1005
 #, php-format
 msgid "Link: %s"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:1001
+#: development/wp-content/plugins/mockup/index.php:1002
 #, php-format
 msgid "Mockup %s is approved"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:1002
+#: development/wp-content/plugins/mockup/index.php:1003
 #, php-format
 msgid "Your MockUp %s has been approved by %s"
 msgstr ""
