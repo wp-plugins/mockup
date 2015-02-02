@@ -59,17 +59,6 @@
 					</tr>
 
 					<tr>
-						<td><span><?php _e('Default sidebar color', 'MockUp'); ?></span></td>
-						<td>
-							<?php $mockup_sidebar = get_option('mockup_sidebar'); ?>
-							<select name="mockup_sidebar"  width="300" style="width: 300px">
-								<option value="light"<?php if($mockup_sidebar == 'light') { echo ' selected="selected"'; } ?>><?php _e('Light Gray', 'MockUp'); ?></option>
-								<option value="dark"<?php if($mockup_sidebar == 'dark') { echo ' selected="selected"'; } ?>><?php _e('Dark Gray', 'MockUp'); ?></option>
-							</select>
-						</td>
-					</tr>
-
-					<tr>
 						<td><span><?php _e('Email address', 'MockUp'); ?></span></td>
 						<td>
 							<input type="text" name="mockup_email" value="<?php echo get_option('mockup_email'); ?>" style="width: 300px;" />
