@@ -3,7 +3,7 @@
  * Plugin Name:       MockUp
  * Plugin URI:        http://www.mockupplugin.com
  * Description:       MockUp helps you to present your designs professionally.
- * Version:           1.5.0
+ * Version:           1.5.1
  * Author:            Eelco Tjallema
  * Author URI:        http://estjallema.nl?utm_medium=mockup
  * License:           GPL2
@@ -16,7 +16,7 @@ if(!class_exists('MockUp')) {
 	define('MOCKUP_POSTTYPE',           'pt_mockup_plugin');
 	define('MOCKUP_TAXONOMY',           'relate_mockup');
 	define('MOCKUP_OPTIONSPAGE_SLUG',   'mockup_options');
-	define('MOCKUP_VERSION',            '1.5.0');
+	define('MOCKUP_VERSION',            '1.5.1');
 	define('MOCKUP_UPGRADE_VERSION',    '1.3.0');
 	define('MOCKUP_WP_VERSION',         get_bloginfo('version'));
 
@@ -488,9 +488,10 @@ if(!class_exists('MockUp')) {
 
 		public function mockup_save($post_id) {
 
-			$nonce = $_POST['mockupnonce_backend'];
+			if(!isset($_POST['mockupnonce_backend']))
+				return $post_id;
 
-			if(empty($nonce) || !wp_verify_nonce($nonce))
+			if(!wp_verify_nonce($_POST['mockupnonce_backend']))
 				return $post_id;
 
 
