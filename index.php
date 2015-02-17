@@ -3,7 +3,7 @@
  * Plugin Name:       MockUp
  * Plugin URI:        http://www.mockupplugin.com
  * Description:       MockUp helps you to present your designs professionally.
- * Version:           1.5.1
+ * Version:           1.5.2
  * Author:            Eelco Tjallema
  * Author URI:        http://estjallema.nl?utm_medium=mockup
  * License:           GPL2
@@ -16,7 +16,7 @@ if(!class_exists('MockUp')) {
 	define('MOCKUP_POSTTYPE',           'pt_mockup_plugin');
 	define('MOCKUP_TAXONOMY',           'relate_mockup');
 	define('MOCKUP_OPTIONSPAGE_SLUG',   'mockup_options');
-	define('MOCKUP_VERSION',            '1.5.1');
+	define('MOCKUP_VERSION',            '1.5.2');
 	define('MOCKUP_UPGRADE_VERSION',    '1.3.0');
 	define('MOCKUP_WP_VERSION',         get_bloginfo('version'));
 
@@ -522,7 +522,7 @@ if(!class_exists('MockUp')) {
 			$mockup_background_position = sanitize_text_field($_POST['mockup_background_position_1']);
 			$mockup_comment_settings    = sanitize_text_field($_POST['mockup_comment_settings_1']);
 			$mockup_email_settings      = sanitize_text_field($_POST['mockup_email_settings_1']);
-			$mockup_email               = sanitize_email($_POST['mockup_email_1']);
+			$mockup_email               = sanitize_text_field($_POST['mockup_email_1']);
 			update_post_meta($post_id, '_mockup_id_1', $mockup_id);
 			update_post_meta($post_id, '_mockup_description_1', $mockup_description);
 			if(isset($_POST['mockup_position_1']))
