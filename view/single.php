@@ -88,13 +88,14 @@
 			<div class="overlay"></div>
 
 
-			<div class="mockup" style="height: <?php echo $single->height.'px'; ?>; background-image: url('<?php echo $single->url; ?>'); background-position:<?php echo $single->position; ?>;"></div>
+			<div class="mockup" style="height: <?php echo $single->height.'px'; ?>; min-width: <?php echo $single->width.'px'; ?>; background-image: url('<?php echo $single->url; ?>'); background-position:<?php echo $single->position; ?>;"></div>
 
 
 			<div class="navbar"><?php echo $menu; ?></div>
 
-
 			<div class="sidebar">
+
+				<a href="#" id="close"><span class="dashicons dashicons-dismiss"></span></a>
 
 				<div id="load_content_here" class="content"></div>
 
