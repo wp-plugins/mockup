@@ -59,6 +59,8 @@
 			images_url = "<?php echo admin_url('images'); ?>";
 			ajax_url = "<?php echo admin_url('admin-ajax.php'); ?>";
 			silidebox_size = "<?php echo $single->sidebarsize; ?>";
+			overlay = "<?php echo $single->overlay; ?>";
+			overflowx = "<?php echo $single->overflowx; ?>";
 		</script>
 		<script src="<?php echo plugins_url('mockup'); ?>/include/js/single.min.js"></script>
 
@@ -85,7 +87,7 @@
 		<body style="background-color: <?php echo $single->bgcolor; ?>;">
 
 
-			<div class="overlay"></div>
+			<?php if($single->overlay === 'show') echo '<div class="overlay"></div>'; ?>
 
 
 			<div class="mockup" style="height: <?php echo $single->height.'px'; ?>; min-width: <?php echo $single->width.'px'; ?>; background-image: url('<?php echo $single->url; ?>'); background-position:<?php echo $single->position; ?>;"></div>

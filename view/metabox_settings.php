@@ -24,8 +24,8 @@ if(empty($mockup_email)) {
 		<tbody valign="top">
 
 			<tr>
-				<td width="20%"><span><strong><?php _e('Comments', 'MockUp'); ?></strong></span></td>
-				<td>
+				<td width="25%"><span><strong><?php _e('Comments', 'MockUp'); ?></strong></span></td>
+				<td width="75%">
 					<select id="mockup_comment_settings" name="mockup_comment_settings_1" width="300" style="width: 300px">
 						<option value="enable"<?php if($mockup_comments == 'enable') { echo ' selected="selected"'; } ?>><?php _e('Enable comments', 'MockUp'); ?></option>
 						<option value="disable"<?php if($mockup_comments == 'disable') { echo ' selected="selected"'; } ?>><?php _e('Disable comments', 'MockUp'); ?></option>

@@ -321,6 +321,30 @@
 					</tr>
 
 
+					<tr>
+						<td><span><?php _e('Overlay settings', 'MockUp'); ?></span></td>
+						<td>
+							<?php $mockup_email_settings = get_option('mockup_overlay_settings'); ?>
+							<select name="mockup_overlay_settings" width="300" style="width: 300px">
+								<option value="show"<?php if($mockup_email_settings == 'show') { echo ' selected="show"'; } ?>><?php _e('Use black overlay.', 'MockUp'); ?></option>
+								<option value="hide"<?php if($mockup_email_settings == 'hide') { echo ' selected="hide"'; } ?>><?php _e('Don\'t black use overlay.', 'MockUp'); ?></option>
+							</select>
+						</td>
+					</tr>
+
+
+					<tr>
+						<td><span><?php _e('Overflow settings', 'MockUp'); ?></span></td>
+						<td>
+							<?php $mockup_email_settings = get_option('mockup_overflow_settings'); ?>
+							<select name="mockup_overflow_settings" width="300" style="width: 300px">
+								<option value="true"<?php if($mockup_email_settings == 'true') { echo ' selected="true"'; } ?>><?php _e('Center screen if has horizontal overflow.', 'MockUp'); ?></option>
+								<option value="false"<?php if($mockup_email_settings == 'false') { echo ' selected="false"'; } ?>><?php _e('Do nothing on horizontal overflow.', 'MockUp'); ?></option>
+							</select>
+						</td>
+					</tr>
+
+
 				<tr>
 					<td colspan="2"><?php submit_button(__('Save Settings', 'MockUp')); ?></td>
 				</tr>
