@@ -1,9 +1,9 @@
 === MockUp ===
 Contributors: Eelco Tjallema
-Tags: mockup, design, presentation, screenshot, webdesign, wireframe, logo, showcase, portfolio, psd, jpg, png, mockvault, redpen, symu
+Tags: mockup, design, presentation, screenshot, webdesign, wireframe, logo, showcase, portfolio, feedback, psd, jpg, png, mockvault, redpen, symu
 Requires at least: 3.8
-Tested up to: 4.1
-Stable tag: 1.5.3
+Tested up to: 4.2.2
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,13 @@ Visit the website for working [demo’s](http://www.mockupplugin.com/demos).
 
 
 == Changelog ==
+
+= 1.5.4 =
+* Images metabox looks better.
+* Images algin is better.
+* Toggle black overlay.
+* Change author.
+
 
 = 1.5.3 =
 * Bug fix.

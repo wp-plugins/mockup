@@ -19,7 +19,7 @@
 
 					echo '<tr>';
 
-						echo '<td width="20%">';
+						echo '<td width="25%">';
 
 							echo '<span><strong>'.$comment['name'].'</strong></span>';
 							echo '<br />';
@@ -29,7 +29,7 @@
 
 						echo '</td>';
 
-						echo '<td>';
+						echo '<td width="75%">';
 
 							echo '<span>'.nl2br($comment['text']).'</span>';
 
