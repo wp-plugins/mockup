@@ -3,7 +3,7 @@
  * Plugin Name:       MockUp
  * Plugin URI:        http://www.mockupplugin.com
  * Description:       MockUp helps you to present your designs professionally.
- * Version:           1.5.4
+ * Version:           1.5.5
  * Author:            Eelco Tjallema
  * Author URI:        http://estjallema.nl?utm_medium=mockup
  * License:           GPL2
@@ -16,7 +16,7 @@ if(!class_exists('MockUp')) {
 	define('MOCKUP_POSTTYPE',           'pt_mockup_plugin');
 	define('MOCKUP_TAXONOMY',           'relate_mockup');
 	define('MOCKUP_OPTIONSPAGE_SLUG',   'mockup_options');
-	define('MOCKUP_VERSION',            '1.5.4');
+	define('MOCKUP_VERSION',            '1.5.5');
 	define('MOCKUP_UPGRADE_VERSION',    '1.3.0');
 	define('MOCKUP_WP_VERSION',         get_bloginfo('version'));
 
@@ -97,8 +97,7 @@ if(!class_exists('MockUp')) {
 
 		public function mockup_posttype() {
 
-			$pos = intval(get_option('mockup_menu_position'));
-			if(empty($pos)) $pos = 160;
+			$pos = intval(get_option('mockup_menu_position', 160));
 
 			$labels = array(
 				'name'                  => __('MockUp\'s', 'MockUp'),
@@ -665,11 +664,11 @@ if(!class_exists('MockUp')) {
 			$this->position = get_post_meta($this->postID, '_mockup_position_1', true);
 			$this->position_background = get_post_meta($this->postID, '_mockup_background_position_1', true);
 			$this->bgcolor = get_post_meta($this->postID, '_mockup_background_color_1', true);
-			$this->activecolor = get_option('mockup_color_active');
+			$this->activecolor = get_option('mockup_color_active', '#21759b');
 			$this->sidebarsize = '300';
-			$this->overlay = get_option('mockup_overlay_settings');
-			$this->overflowx = get_option('mockup_overflow_settings');
-			$this->fontfamily = get_option('mockup_fontfamily');
+			$this->overlay = get_option('mockup_overlay_settings', 'show');
+			$this->overflowx = get_option('mockup_overflow_settings', 'true');
+			$this->fontfamily = get_option('mockup_fontfamily', "'Helvetica Neue', Helvetica, Arial, sans-serif");
 		}
 
 
@@ -723,7 +722,7 @@ if(!class_exists('MockUp')) {
 
 		public function mockup_check_password() {
 			if(post_password_required()) return true;
-			$password_settings = get_option('mockup_password_settings');
+			$password_settings = get_option('mockup_password_settings', 'default');
 
 			if($password_settings == 'inherit') {
 
