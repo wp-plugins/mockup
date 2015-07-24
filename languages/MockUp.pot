@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MockUp 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-30 08:39+0200\n"
+"POT-Creation-Date: 2015-07-24 10:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,7 +60,7 @@ msgid "Name"
 msgstr ""
 
 #: development/wp-content/plugins/mockup/index.php:63
-#: development/wp-content/plugins/mockup/index.php:475
+#: development/wp-content/plugins/mockup/index.php:476
 #: development/wp-content/plugins/mockup/view/metabox_settings.php:27
 msgid "Comments"
 msgstr ""
@@ -77,166 +77,166 @@ msgstr ""
 msgid "To view this protected MockUp, enter the password below:"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:106
+#: development/wp-content/plugins/mockup/index.php:107
 msgid "MockUp's"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:107
 #: development/wp-content/plugins/mockup/index.php:108
-#: development/wp-content/plugins/mockup/view/metabox_images.php:17
+#: development/wp-content/plugins/mockup/index.php:109
+#: development/wp-content/plugins/mockup/view/metabox_images.php:114
 msgid "MockUp"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:109
+#: development/wp-content/plugins/mockup/index.php:110
 msgid "All MockUps"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:110
 #: development/wp-content/plugins/mockup/index.php:111
+#: development/wp-content/plugins/mockup/index.php:112
 msgid "Add new MockUp"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:112
+#: development/wp-content/plugins/mockup/index.php:113
 msgid "Edit"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:113
+#: development/wp-content/plugins/mockup/index.php:114
 msgid "Edit MockUp"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:114
+#: development/wp-content/plugins/mockup/index.php:115
 msgid "New MockUp"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:115
 #: development/wp-content/plugins/mockup/index.php:116
+#: development/wp-content/plugins/mockup/index.php:117
 msgid "View MockUp"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:117
+#: development/wp-content/plugins/mockup/index.php:118
 msgid "Search MockUps"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:118
+#: development/wp-content/plugins/mockup/index.php:119
 msgid "No MockUps found"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:119
+#: development/wp-content/plugins/mockup/index.php:120
 msgid "No MockUps found in Trash"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:120
+#: development/wp-content/plugins/mockup/index.php:121
 msgid "Parent MockUp"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:142
-#: development/wp-content/plugins/mockup/index.php:152
+#: development/wp-content/plugins/mockup/index.php:143
+#: development/wp-content/plugins/mockup/index.php:153
 msgid "Customers"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:143
+#: development/wp-content/plugins/mockup/index.php:144
 msgid "Customer"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:144
+#: development/wp-content/plugins/mockup/index.php:145
 msgid "Search customers"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:145
+#: development/wp-content/plugins/mockup/index.php:146
 msgid "All customers"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:146
 #: development/wp-content/plugins/mockup/index.php:147
+#: development/wp-content/plugins/mockup/index.php:148
 msgid "Parent customer"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:148
+#: development/wp-content/plugins/mockup/index.php:149
 msgid "Edit customer"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:149
+#: development/wp-content/plugins/mockup/index.php:150
 msgid "Update customer"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:150
+#: development/wp-content/plugins/mockup/index.php:151
 msgid "Add new customer"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:151
+#: development/wp-content/plugins/mockup/index.php:152
 msgid "New customer name"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:192
+#: development/wp-content/plugins/mockup/index.php:193
 #: development/wp-content/plugins/mockup/view/options.php:4
 msgid "MockUp Options & Settings"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:193
-#: development/wp-content/plugins/mockup/index.php:208
-#: development/wp-content/plugins/mockup/index.php:485
+#: development/wp-content/plugins/mockup/index.php:194
+#: development/wp-content/plugins/mockup/index.php:209
+#: development/wp-content/plugins/mockup/index.php:486
 msgid "Settings"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:286
+#: development/wp-content/plugins/mockup/index.php:287
 msgid "Select or upload the MockUp"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:287
+#: development/wp-content/plugins/mockup/index.php:288
 msgid "Add MockUp"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:288
+#: development/wp-content/plugins/mockup/index.php:289
 msgid "Are you sure?"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:318
+#: development/wp-content/plugins/mockup/index.php:319
 msgid "Show all customers"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:389
+#: development/wp-content/plugins/mockup/index.php:390
 msgid "Status"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:405
-#: development/wp-content/plugins/mockup/view/metabox_images.php:31
+#: development/wp-content/plugins/mockup/index.php:406
+#: development/wp-content/plugins/mockup/view/metabox_images.php:96
 msgid "Approved"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:464
+#: development/wp-content/plugins/mockup/index.php:465
 msgid "Image's"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:671
+#: development/wp-content/plugins/mockup/index.php:672
 msgid "No Mockup found"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:672
+#: development/wp-content/plugins/mockup/index.php:673
 msgid "You did not add a MockUp."
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:887
+#: development/wp-content/plugins/mockup/index.php:894
 #: development/wp-content/plugins/mockup/view/metabox_comments.php:26
 msgid "ago"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:937
+#: development/wp-content/plugins/mockup/index.php:944
 #, php-format
 msgid "%s made comments on MockUp %s"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:940
-#: development/wp-content/plugins/mockup/index.php:1005
+#: development/wp-content/plugins/mockup/index.php:947
+#: development/wp-content/plugins/mockup/index.php:1012
 #, php-format
 msgid "Link: %s"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:1002
+#: development/wp-content/plugins/mockup/index.php:1009
 #, php-format
 msgid "Mockup %s is approved"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/index.php:1003
+#: development/wp-content/plugins/mockup/index.php:1010
 #, php-format
 msgid "Your MockUp %s has been approved by %s"
 msgstr ""
@@ -249,57 +249,57 @@ msgstr ""
 msgid "No comments have been made."
 msgstr ""
 
-#: development/wp-content/plugins/mockup/view/metabox_images.php:30
+#: development/wp-content/plugins/mockup/view/metabox_images.php:49
+msgid "No MockUp is set."
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/metabox_images.php:50
+msgid "No background image is set, the background color will be used."
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/metabox_images.php:82
+msgid "Status:"
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/metabox_images.php:84
+msgid "Remove approval"
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/metabox_images.php:95
 #, php-format
 msgid "Approved by %s"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/view/metabox_images.php:36
-msgid "Remove approval"
-msgstr ""
-
-#: development/wp-content/plugins/mockup/view/metabox_images.php:54
-msgid "Delete MockUp"
-msgstr ""
-
-#: development/wp-content/plugins/mockup/view/metabox_images.php:55
+#: development/wp-content/plugins/mockup/view/metabox_images.php:118
 msgid "Set MockUp"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/view/metabox_images.php:64
+#: development/wp-content/plugins/mockup/view/metabox_images.php:118
+msgid "Delete MockUp"
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/metabox_images.php:143
 msgid "MockUp position:"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/view/metabox_images.php:101
-msgid "No MockUp is set."
-msgstr ""
-
-#: development/wp-content/plugins/mockup/view/metabox_images.php:102
-msgid "This is a preview of your MockUp image."
-msgstr ""
-
-#: development/wp-content/plugins/mockup/view/metabox_images.php:116
+#: development/wp-content/plugins/mockup/view/metabox_images.php:164
 msgid "Background Color:"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/view/metabox_images.php:136
-msgid "Delete background image"
+#: development/wp-content/plugins/mockup/view/metabox_images.php:177
+msgid "Background:"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/view/metabox_images.php:137
+#: development/wp-content/plugins/mockup/view/metabox_images.php:181
 msgid "Set background image"
 msgstr ""
 
-#: development/wp-content/plugins/mockup/view/metabox_images.php:145
+#: development/wp-content/plugins/mockup/view/metabox_images.php:181
+msgid "Delete background image"
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/metabox_images.php:204
 msgid "Background image position:"
-msgstr ""
-
-#: development/wp-content/plugins/mockup/view/metabox_images.php:167
-msgid "No background image is set, the background color will be used."
-msgstr ""
-
-#: development/wp-content/plugins/mockup/view/metabox_images.php:168
-msgid "This is a preview of your background image."
 msgstr ""
 
 #: development/wp-content/plugins/mockup/view/metabox_settings.php:30
@@ -451,7 +451,7 @@ msgid "%s Default position"
 msgstr ""
 
 #: development/wp-content/plugins/mockup/view/options.php:105
-#: development/wp-content/plugins/mockup/view/options.php:325
+#: development/wp-content/plugins/mockup/view/options.php:349
 msgid "Save Settings"
 msgstr ""
 
@@ -566,4 +566,28 @@ msgstr ""
 
 #: development/wp-content/plugins/mockup/view/options.php:318
 msgid "Use bulk password settings."
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/options.php:325
+msgid "Overlay settings"
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/options.php:329
+msgid "Use black overlay."
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/options.php:330
+msgid "Don't black use overlay."
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/options.php:337
+msgid "Overflow settings"
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/options.php:341
+msgid "Center screen if has horizontal overflow."
+msgstr ""
+
+#: development/wp-content/plugins/mockup/view/options.php:342
+msgid "Do nothing on horizontal overflow."
 msgstr ""
